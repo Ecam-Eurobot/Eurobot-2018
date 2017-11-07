@@ -43,22 +43,22 @@ The following is a set of guidelines for contributing to EuroBot and its package
   5. Once the changes are on your fork on GitHub, you can do a ** Pull-Request **
     ![Clone](assets/tuto-contribution-pr.png)
 
-    ## Styleguides
+  ## Styleguides
 
-    ### Git Commit Messages
+  ### Git Commit Messages
 
-    * Use the present tense ("Add feature" not "Added feature")
-    * Reference issues and pull requests liberally after the first line
-    * When only changing documentation, include `[doc]` in the commit description
+  * Use the present tense ("Add feature" not "Added feature")
+  * Reference issues and pull requests liberally after the first line
+  * When only changing documentation, include `[doc]` in the commit description
 
-    ### Python Styleguide
+  ### Python Styleguide
 
-    All Python must adhere to [Python PEP8 Standard Style](https://www.python.org/dev/peps/pep-0008/).
+  All Python must adhere to [Python PEP8 Standard Style](https://www.python.org/dev/peps/pep-0008/).
 
-    ### C++ Styleguide
+  ### C++ Styleguide
 
-    All C++ must adhere to [Google C++ Standard Style](http://google.github.io/styleguide/cppguide.html).
+  All C++ must adhere to [Google C++ Standard Style](http://google.github.io/styleguide/cppguide.html).
 
-    ### Documentation Styleguide
+  ### Documentation Styleguide
 
-    Follow the documentation styleguide of the programming language used.
+  Follow the documentation styleguide of the programming language used.
