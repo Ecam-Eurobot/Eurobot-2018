@@ -37,7 +37,7 @@ The following is a set of guidelines for contributing to EuroBot and its package
   git checkout -b <branch-name> // Create and swap to the branch with name: <branch-name>
   git add .
   git commit -m "First commit"
-  git push
+  git push origin <branch-name>
   ```
 
   5. Once the changes are on your fork on GitHub, you can do a ** Pull-Request **
