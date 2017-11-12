@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
 import rospy
+import tf
 import actionlib
 from actionlib_msgs.msg import *
+from std_msgs.msg import String
 from geometry_msgs.msg import Pose, Point, Quaternion, Twist, PoseWithCovarianceStamped
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from random import sample
@@ -12,6 +14,7 @@ from math import pow, sqrt
 class MoveBaseTest:
     def __init__(self):
         self.initial_pose = 0
+        self.rest_time = 5
         rospy.init_node('minus_nav')
         rospy.on_shutdown(self.shutdown)
 
@@ -20,10 +23,10 @@ class MoveBaseTest:
 
         locations = dict()
 
-        locations['first'] = Pose(Point(1.50, -0.5, 0.0), Quaternion(0.000, 0.000, 0.223, 0.975))
-        locations['second'] = Pose(Point(1.50, -1.5, 0.0), Quaternion(0.000, 0.000, 0.223, 0.975))
-        locations['third'] = Pose(Point(1.00, -1.5, 0.0), Quaternion(0.000, 0.000, 0.223, 0.975))
-        locations['fourth'] = Pose(Point(0.50, -0.5, 0.0), Quaternion(0.000, 0.000, 0.223, 0.975))
+        locations['first'] = Pose(Point(1.50, -0.5, 0.0), Quaternion(*tf.transformations.quaternion_from_euler(0, 0, 0)))
+        #locations['second'] = Pose(Point(1.50, -1.5, 0.0), Quaternion(0.000, 0.000, 0.223, 0.975))
+        #locations['third'] = Pose(Point(1.00, -1.5, 0.0), Quaternion(0.000, 0.000, 0.223, 0.975))
+        #locations['fourth'] = Pose(Point(0.50, -0.5, 0.0), Quaternion(0.000, 0.000, 0.223, 0.975))
 
         # Subscribe to the move_base action server
         self.move_base = actionlib.SimpleActionClient("move_base", MoveBaseAction)
@@ -38,7 +41,15 @@ class MoveBaseTest:
         # A variable to hold the initial pose of the robot to be set by
         # the user in RViz
         initial_pose = PoseWithCovarianceStamped()
+        initial_pose.header.frame_id = "map"
+        initial_pose.pose.pose.position.x = 1.0
+        initial_pose.pose.pose.position.y = -1.0
+        initial_pose.pose.pose.position.z = 0.0
 
+        initial_pose.pose.pose.orientation.x = 0.0
+        initial_pose.pose.pose.orientation.y = 0.0
+        initial_pose.pose.pose.orientation.z = 0.0
+        initial_pose.pose.pose.orientation.w = 0.0
         # Variables to keep track of success rate, running time,
         # and distance traveled
         n_locations = len(locations)
@@ -52,17 +63,21 @@ class MoveBaseTest:
         last_location = ""
 
         # Get the initial pose from the user
-        rospy.loginfo("*** Click the 2D Pose Estimate button in RViz to set the robot's initial pose...")
-        rospy.wait_for_message('initialpose', PoseWithCovarianceStamped)
+        #rospy.loginfo("*** Click the 2D Pose Estimate button in RViz to set the robot's initial pose...")
+        #rospy.wait_for_message('initialpose', PoseWithCovarianceStamped)
         self.last_location = Pose()
-        rospy.Subscriber('initialpose', PoseWithCovarianceStamped, self.update_initial_pose)
+        start = rospy.Publisher('start', String, queue_size=2)
+        rospy.sleep(3)
+        start.publish("Start")
+        pub = rospy.Publisher('initialpose', PoseWithCovarianceStamped, queue_size=1)
+        pub.publish(initial_pose)
 
         # Make sure we have the initial pose
-        while initial_pose.header.stamp == "":
-            rospy.sleep(1)
+        #while initial_pose.header.stamp == "":
+            #rospy.sleep(1)
 
         rospy.loginfo("Starting navigation test")
-
+        #rospy.sleep(5)
         # Begin the main loop and run through a sequence of locations
         while not rospy.is_shutdown():
             # If we've gone through the current sequence,
