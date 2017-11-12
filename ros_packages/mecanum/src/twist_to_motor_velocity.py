@@ -11,6 +11,11 @@ WHEEL_SEPARATION_LENGTH = 0.250 / 2
 WHEEL_GEOMETRY = WHEEL_SEPARATION_WIDTH + WHEEL_SEPARATION_LENGTH
 WHEEL_RADIUS = 0.3
 
+pub_mfl = None
+pub_mfr = None
+pub_mbl = None
+pub_mbr = None
+
 def convert(move):
     x = move.linear.x
     y = move.linear.y
@@ -36,10 +41,10 @@ if __name__ == '__main__':
     try:
         rospy.init_node('mecanum')
 
-        pub_mfl = rospy.Publisher('i2c/motor/fl', Int32)
-        pub_mfr = rospy.Publisher('i2c/motor/fr', Int32)
-        pub_mbl = rospy.Publisher('i2c/motor/bl', Int32)
-        pub_mbr = rospy.Publisher('i2c/motor/br', Int32)
+        pub_mfl = rospy.Publisher('i2c/motor/fl', Int32, queue_size=1)
+        pub_mfr = rospy.Publisher('i2c/motor/fr', Int32, queue_size=1)
+        pub_mbl = rospy.Publisher('i2c/motor/bl', Int32, queue_size=1)
+        pub_mbr = rospy.Publisher('i2c/motor/br', Int32, queue_size=1)
 
         sub = rospy.Subscriber('cmd_vel', Twist, convert)
         rospy.spin()
