@@ -27,7 +27,11 @@ class I2C:
             for byte in data:
                 self.bus.write_byte(self.address, byte)
         elif isinstance(data, int):
-            self.bus.write_byte(self.address, data)
+            if data < 255:
+                self.bus.write_byte(self.address, data)
+            else:
+                for byte in list(bytearray(struct.pack('i', data))):
+                    self.bus.write_byte(self.address, byte)
 
     # read_i2c_block_data can't process more than 32 bytes, so num_bytes should
     # not be greater than 32 !!
