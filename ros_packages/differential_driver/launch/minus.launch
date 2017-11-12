@@ -1,0 +1,52 @@
+<launch>
+  <!-- change this next line to include the launch file for your robot's hardware drivers: -->
+  <!-- <include file="$(find knex_ros)/launch/knex_arduino_ser.launch" /> -->
+  <node pkg="rosserial_python" type="serial_node.py" args="/dev/ttyACM0" name="serial_node0" respawn="true"/>
+  <node pkg="rosserial_python" type="serial_node.py" args="/dev/ttyACM1" name="serial_node1" respawn="true"/>
+  <rosparam param="ticks_meter">16400</rosparam>
+
+  <node pkg="differential_drive" type="diff_tf.py" name="diff_tf">
+  	  <rosparam param="base_width">0.359</rosparam>
+	  <rosparam param="encoder_min">-100000</rosparam>
+	  <rosparam param="encoder_max">100000</rosparam>
+  </node>
+  <node pkg="differential_drive" type="pid_velocity" name="lpid_velocity">
+      <remap from="wheel" to="lwheel"/>
+      <remap from="motor_cmd" to="lmotor_cmd"/>
+      <remap from="wheel_vtarget" to="lwheel_vtarget"/>
+      <remap from="wheel_vel" to="lwheel_vel"/>
+      <rosparam param="Kp">200</rosparam>
+      <rosparam param="Ki">200</rosparam>
+      <rosparam param="Kd">0</rosparam>
+      <rosparam param="out_min">-255</rosparam>
+      <rosparam param="out_max">255</rosparam>
+      <rosparam param="rate">30</rosparam>
+      <rosparam param="timeout_ticks">4</rosparam>
+      <rosparam param="rolling_pts">5</rosparam>
+	  <rosparam param="encoder_min">-100000</rosparam>
+	  <rosparam param="encoder_max">100000</rosparam>
+  </node>
+  <node pkg="differential_drive" type="pid_velocity" name="rpid_velocity">
+      <remap from="wheel" to="rwheel"/>
+      <remap from="motor_cmd" to="rmotor_cmd"/>
+      <remap from="wheel_vtarget" to="rwheel_vtarget"/>
+      <remap from="wheel_vel" to="rwheel_vel"/>
+      <rosparam param="Kp">1</rosparam>
+      <rosparam param="Ki">0</rosparam>
+      <rosparam param="Kd">0</rosparam>
+      <rosparam param="out_min">-255</rosparam>
+      <rosparam param="out_max">255</rosparam>
+      <rosparam param="rate">1</rosparam>
+      <rosparam param="timeout_ticks">4</rosparam>
+      <rosparam param="rolling_pts">5</rosparam>
+	  <rosparam param="encoder_min">-100000</rosparam>
+	  <rosparam param="encoder_max">100000</rosparam>
+  </node>
+
+  <!-- <node pkg="differential_drive" type="virtual_joystick.py" name="virtual_joystick" output="screen"/> -->
+  <node pkg="differential_drive" type="twist_to_motors.py" name="twist_to_motors" output="screen">
+	<!-- <remap from="twist"/> -->
+    <rosparam param="base_width">0.359</rosparam>
+  </node>
+
+</launch>
