@@ -1,0 +1,9 @@
+obstacle_range: 3
+raytrace_range: 3
+footprint: [[-0.075, -0.1], [0.075, -0.1], [0.075, 0.1], [-0.075, 0.1]]
+inflation_radius: 0.3
+static_map: true
+
+#observation_sources: laser_scan_sensor point_cloud_sensor
+#laser_scan_sensor: {sensor_frame: frame_name, data_type: LaserScan, topic: topic_name, marking: true, clearing: true}
+#point_cloud_sensor: {sensor_frame: frame_name, data_type: PointCloud, topic: topic_name, marking: true, clearing: true}
