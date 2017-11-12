@@ -1,0 +1,4 @@
+<launch>
+<node name="twist_to_velocity" pkg="mecanum" type="twist_to_motor_velocity.py" output="screen" />
+<node name="velocity_to_i2c" pkg="mecanum" type="velocity_to_i2c_motor.py" output="screen" />
+</launch>

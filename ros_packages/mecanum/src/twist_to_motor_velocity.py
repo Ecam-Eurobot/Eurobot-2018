@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
-from std_msgs.msg import Float32
+from std_msgs.msg import Int32
 from geometry_msgs.msg import Twist
 
 import math
@@ -10,6 +10,7 @@ WHEEL_SEPARATION_WIDTH = 0.150 / 2
 WHEEL_SEPARATION_LENGTH = 0.250 / 2
 WHEEL_GEOMETRY = WHEEL_SEPARATION_WIDTH + WHEEL_SEPARATION_LENGTH
 WHEEL_RADIUS = 0.3
+CST = 10000
 
 pub_mfl = None
 pub_mfr = None
@@ -26,20 +27,20 @@ def convert(move):
     back_left = (y - x + rot * WHEEL_GEOMETRY) / WHEEL_RADIUS
     front_left = (y + x + rot * WHEEL_GEOMETRY) / WHEEL_RADIUS
 
-    pub_mfl.publish(front_left)
-    pub_mfr.publish(front_right)
-    pub_mbl.publish(back_left)
-    pub_mbr.publish(back_right)
+    pub_mfl.publish(int(front_left * CST))
+    pub_mfr.publish(int(front_right * CST))
+    pub_mbl.publish(int(back_left * CST))
+    pub_mbr.publish(int(back_right * CST))
 
 
 if __name__ == '__main__':
     try:
         rospy.init_node('mecanum')
 
-        pub_mfl = rospy.Publisher('i2c/motor/fl', Float32, queue_size=1)
-        pub_mfr = rospy.Publisher('i2c/motor/fr', Float32, queue_size=1)
-        pub_mbl = rospy.Publisher('i2c/motor/bl', Float32, queue_size=1)
-        pub_mbr = rospy.Publisher('i2c/motor/br', Float32, queue_size=1)
+        pub_mfl = rospy.Publisher('i2c/motor/fl', Int32, queue_size=1)
+        pub_mfr = rospy.Publisher('i2c/motor/fr', Int32, queue_size=1)
+        pub_mbl = rospy.Publisher('i2c/motor/bl', Int32, queue_size=1)
+        pub_mbr = rospy.Publisher('i2c/motor/br', Int32, queue_size=1)
 
         sub = rospy.Subscriber('cmd_vel', Twist, convert)
         rospy.spin()

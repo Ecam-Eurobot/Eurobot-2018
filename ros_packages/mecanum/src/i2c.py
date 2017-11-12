@@ -2,7 +2,7 @@ import logging
 import smbus
 import time
 import unittest
-
+import struct
 
 class I2C:
     """
