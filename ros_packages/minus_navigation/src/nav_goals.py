@@ -147,8 +147,6 @@ class MoveBaseTest:
     def shutdown(self):
         rospy.loginfo("Stopping the robot...")
         self.move_base.cancel_goal()
-        rospy.sleep(2)
-        self.cmd_vel_pub.publish(Twist())
         rospy.sleep(1)
 
 
