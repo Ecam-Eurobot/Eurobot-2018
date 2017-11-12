@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
-from tf.transformations import *
+import tf
 import actionlib
 from actionlib_msgs.msg import *
 from std_msgs.msg import String
@@ -21,7 +21,7 @@ class MoveBaseTest:
         goal_states = ['PENDING', 'ACTIVE', 'PREEMPTED', 'SUCCEEDED', 'ABORTED', 'REJECTED',
                        'PREEMPTING', 'RECALLING', 'RECALLED', 'LOST']
 
-        obj = Pose(Point(2.50, -0.5, 0.0), Quaternion(quaternion_from_euler(0.0, 0.0, 3.14159, axes='sxyz')))
+        obj = Pose(Point(1.5, -1.0, 0.0), Quaternion(*tf.transformations.quaternion_from_euler(0, 0, 3.14159)))
 
         # Subscribe to the move_base action server
         self.move_base = actionlib.SimpleActionClient("move_base", MoveBaseAction)
@@ -36,17 +36,9 @@ class MoveBaseTest:
 
         rospy.loginfo("Connected to move base server")
 
-        # A variable to hold the initial pose of the robot to be set by
-        # the user in RViz
-        initial_pose = PoseWithCovarianceStamped()
-        initial_pose.header.frame_id = "map"
-        initial_pose.pose = Pose(Point(1.00, -1.00, 0.0), Quaternion(quaternion_from_euler(0.0, 0.0, 3.14159, axes='sxyz')))
-
         start = rospy.Publisher('start', String, queue_size=2)
         rospy.sleep(3)
         start.publish("Start")
-        pub = rospy.Publisher('initialpose', PoseWithCovarianceStamped, queue_size=1)
-        pub.publish(initial_pose)
 
         rospy.loginfo("Starting navigation test")
         # Set up the next goal location
@@ -83,6 +75,9 @@ class MoveBaseTest:
 
     def shutdown(self):
         rospy.loginfo("Stopping the robot...")
+        end = rospy.Publisher('end', String, queue_size=2)
+        rospy.sleep(1)
+        end.publish("End")
         self.move_base.cancel_goal()
         rospy.sleep(1)
 

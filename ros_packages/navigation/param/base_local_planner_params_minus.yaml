@@ -3,4 +3,5 @@ TrajectoryPlannerROS:
     acc_lim_y: 0.5
     acc_lim_theta: 0.5
     max_vel_x: 0.5
-    min_vel_x: 0.01   
+    min_vel_x: 0.01
+    controller_frequency: 10

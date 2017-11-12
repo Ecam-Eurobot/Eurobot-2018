@@ -1,6 +1,5 @@
 <launch>
     <arg name="team" default="unknown" />
-    <arg name="simulate_motors" default="false" />
     <arg name="raspberry" default="false" />
     <arg name="viz" default="false" />
     <arg name="model" default="$(find robot_description)/urdf/minus.xacro"/>
@@ -10,8 +9,7 @@
     <rosparam command="load" file="$(find robot_2018)/param/wheel.yaml" />
     <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
 
-    <!-- Navigation --><rosparam command="load" file="$(find robot_2018)/param/mecanum.yaml" />
-    <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+    <!-- Navigation -->
     <include file="$(find navigation)/launch/move_base_minus.launch" />
 
     <!-- Strategy -->
@@ -20,10 +18,13 @@
         <arg name="team" value="$(arg team)" />
     </include>
 
+    <!-- Motion -->
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+    <include file="$(find differential_driver)/launch/minus.launch" />
+
     <!-- Visualization -->
     <group if="$(arg viz)">
         <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
     </group>
-    <include file="$(find differential_driver)/launch/minus.launch" />
 </launch>

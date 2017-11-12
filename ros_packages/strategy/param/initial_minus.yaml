@@ -1,11 +1,11 @@
 start:
     green:
         position:
-            x: 0.5
-            y: -0.5
-            orientation: 3.14159
+            x: 0.7
+            y: -0.9
+            orientation: 0.0
     red:
         position:
-            x: 2.5
-            y: -0.5
-            orientation: 0.00
+            x: 2.3
+            y: -0.9
+            orientation: 3.14159
