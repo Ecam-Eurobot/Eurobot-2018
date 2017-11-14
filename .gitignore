@@ -1,2 +1,6 @@
 # Editors
 .vscode
+.idea
+
+# Python
+.pyc

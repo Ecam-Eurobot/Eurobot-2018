@@ -1,0 +1,4 @@
+<launch>
+    <node name="keyboard" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" output="screen" />
+    <node name="twist_to_i2c" pkg="robot_2017" type="twist_to_i2c.py" output="screen" />
+</launch>
