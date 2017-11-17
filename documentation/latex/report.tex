@@ -1,0 +1,39 @@
+\documentclass{tudelft-report}
+
+\begin{document}
+
+%% Use Roman numerals for the page numbers of the title pages and table of
+%% contents.
+\frontmatter
+
+\title[Documentation]{Eurobot 2018}
+\author{ECAM}
+\affiliation{Haute Ecole Léonard De Vinci}
+\coverimage{terrain-2018.jpg}
+\makecover
+
+%% Include an optional title page.
+\input{cover/title}
+
+
+\tableofcontents
+
+%% Use Arabic numerals for the page numbers of the chapters.
+\mainmatter
+
+\input{chapters/introduction}
+\input{chapters/overview}
+\input{chapters/mechanisms}
+\input{chapters/motion}
+\input{chapters/ros}
+
+
+%% Use letters for the chapter numbers of the appendices.
+\appendix
+
+%\input{appendix-a}
+
+\bibliography{report}
+
+\end{document}
+
