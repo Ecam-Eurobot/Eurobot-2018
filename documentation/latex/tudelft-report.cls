@@ -459,7 +459,7 @@
     {\Large\headerstyle}
     {\bfseries\thesection.\ }
     {0pt}
-    {\bfseries\color{title}}
+    {\bfseries}
 %% Sections are preceded by an empty line.
 \titlespacing{\section}{0pt}{\baselineskip}{0pt}
 %% In the table of contents, section names are followed by a line of dots 8pt
@@ -472,7 +472,7 @@
     {\large\headerstyle}
     {\bfseries\thesubsection.\ }
     {0pt}
-    {\bfseries\color{title}}
+    {\bfseries}
 \titlespacing{\subsection}{0pt}{\baselineskip}{0pt}
 \dottedcontents{subsection}[7em]{\titlefont}{3.2em}{8pt}
 
@@ -482,7 +482,7 @@
     {\headerstyle}
     {}
     {0pt}
-    {\color{title}}
+    {}
 %% Subsubsections are preceded by an empty line and do not appear in the table
 %% of contents.
 \titlespacing{\subsubsection}{0pt}{\bigskipamount}{0pt}
