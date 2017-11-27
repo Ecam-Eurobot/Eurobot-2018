@@ -1,0 +1,89 @@
+\begin{titlepage}
+
+\begin{center}
+
+%% Insert the TU Delft logo at the bottom of the page.
+\begin{tikzpicture}[remember picture,overlay]
+    \node at (current page.south)[anchor=south,inner sep=0pt]{
+        \includegraphics{cover/logo-ecam}
+    };
+\end{tikzpicture}
+
+%% Extra whitespace at the top.
+\vspace*{2\bigskipamount}
+
+%% Print the title in cyan.
+{\makeatletter
+\titlestyle\color{tudelft-cyan}\Huge\@title
+\makeatother}
+
+%% Print the optional subtitle in black.
+{\makeatletter
+\ifx\@subtitle\undefined\else
+    \bigskip
+    \titlefont\titleshape\LARGE\@subtitle
+\fi
+\makeatother}
+
+\bigskip
+\bigskip
+
+by
+%door
+
+\bigskip
+\bigskip
+
+%% Print the name of the author.
+{\makeatletter
+\titlefont\Large\bfseries\@author
+\makeatother}
+
+\vfill
+
+in partial fulfillment of the requirements for the degree of
+%in overeenstemming met de vereisten voor het verkrijgen van de graad van
+
+\bigskip
+\bigskip
+
+{\bfseries Master of Industrial Engineering}
+
+in Electronics and Computer Science
+
+\bigskip
+\bigskip
+
+at the ECAM
+%aan de Technische Universiteit Delft,
+
+
+\vfill
+
+\begin{tabular}{lll}
+%% Add additional information here, per faculty requirements, e.g
+%    Student number: & 1234567 \\
+    Project duration: & \multicolumn{2}{l}{October 1, 2017 -- March 24, 2018} \\
+    
+    Participating students:
+        & E. Albert & \\
+        & S. Barry & \\
+        & C. Castermans & \\
+        & M. Crappe & \\
+        & M. David & \\
+        & W. De Decker & \\
+        & P. De Keyzer & \\
+        & M. De Viron & \\
+        & S. Garo & \\
+        & A. Hagopian & \\
+        & J. Kessels & \\
+        & J. Nshuti & \\ 
+        & V. Puissant Baeyens & \\
+        & T. Selleslagh & \\
+        & J. Vanneste & 
+\end{tabular}
+
+\end{center}
+
+\end{titlepage}
+
