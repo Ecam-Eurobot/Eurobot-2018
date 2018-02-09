@@ -8,20 +8,21 @@ from i2c import I2C
 pub = None
 
 def motor_front_left(vel):
-    print vel
-    robot_i2c.send(vel)
+    print vel.data
+    print type(vel.data)
+    robot_i2c.send(vel.data)
 
 def motor_front_right(vel):
-    print vel
-    robot_i2c.send(vel)
+    print vel.data
+    robot_i2c.send(vel.data)
 
 def motor_back_left(vel):
-    print vel
-    robot_i2c.send(vel)
+    print vel.data
+    robot_i2c.send(vel.data)
 
 def motor_back_right(vel):
-    print vel
-    robot_i2c.send(vel)
+    print vel.data
+    robot_i2c.send(vel.data)
 
 if __name__ == '__main__':
     try:
