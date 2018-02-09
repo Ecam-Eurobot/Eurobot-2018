@@ -26,7 +26,7 @@ def motor_front_left(vel):
 if __name__ == '__main__':
     try:
         robot_i2c = I2C(0x05)
-        rospy.init_node('velocity_to_i2c_motor)
+        rospy.init_node('velocity_to_i2c_motor')
         rospy.Subscriber('i2c/motor/fl', Float32, motor_front_left)
         rospy.Subscriber('i2c/motor/fr', Float32, motor_front_right)
         rospy.Subscriber('i2c/motor/bl', Float32, motor_back_left)
