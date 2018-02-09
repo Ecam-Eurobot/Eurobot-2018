@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
-from std_msgs.msg import Int8
+from std_msgs.msg import Int32
 
 from i2c import I2C
 
@@ -27,10 +27,10 @@ if __name__ == '__main__':
     try:
         robot_i2c = I2C(0x05)
         rospy.init_node('velocity_to_i2c_motor)
-        rospy.Subscriber('i2c/motor/fl', Int8, motor_front_left)
-        rospy.Subscriber('i2c/motor/fr', Int8, motor_front_right)
-        rospy.Subscriber('i2c/motor/bl', Int8, motor_back_left)
-        rospy.Subscriber('i2c/motor/br', Int8, motor_back_right)
+        rospy.Subscriber('i2c/motor/fl', Int32, motor_front_left)
+        rospy.Subscriber('i2c/motor/fr', Int32, motor_front_right)
+        rospy.Subscriber('i2c/motor/bl', Int32, motor_back_left)
+        rospy.Subscriber('i2c/motor/br', Int32, motor_back_right)
         rospy.spin()
     except rospy.ROSInterruptException:
         pass
