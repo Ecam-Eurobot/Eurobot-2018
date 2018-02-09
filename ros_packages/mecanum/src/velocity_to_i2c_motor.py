@@ -11,15 +11,15 @@ def motor_front_left(vel):
     print vel
     robot_i2c.send(vel)
 
-def motor_front_left(vel):
+def motor_front_right(vel):
     print vel
     robot_i2c.send(vel)
 
-def motor_front_left(vel):
+def motor_back_left(vel):
     print vel
     robot_i2c.send(vel)
 
-def motor_front_left(vel):
+def motor_back_right(vel):
     print vel
     robot_i2c.send(vel)
 
