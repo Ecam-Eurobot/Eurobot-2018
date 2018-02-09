@@ -8,7 +8,7 @@ from i2c import I2C
 pub = None
 
 def motor_front_left(vel):
-    print vel + 1
+    print vel + 1.0
     robot_i2c.send(vel)
 
 def motor_front_right(vel):
