@@ -32,7 +32,7 @@ def convert(move):
     front_left *= 60/(2*math.pi)
 
     pub_mfl.publish(int(front_left))
-    pub_mfr.publsh(int(front_right))
+    pub_mfr.publish(int(front_right))
     pub_mbl.publish(int(back_left))
     pub_mbr.publish(int(back_right))
 
