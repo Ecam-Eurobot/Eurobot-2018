@@ -1,0 +1,29 @@
+<launch>
+    <rosparam command="load" file="$(find robot_2018)/param/mecanum.yaml" />
+
+    <node name="mecanum" pkg="mecanum" type="mecanum.py" />
+
+    <group ns="mecanum">
+        <node name="i2c_front_left" pkg="motor_i2c" type="motor_i2c.py">
+            <remap from="motor" to="mecanum/motor/front/left" />
+            <param name="motor" type="string" value="front/left" />
+        </node>
+
+        <node name="i2c_front_right" pkg="motor_i2c" type="motor_i2c.py">
+            <remap from="motor" to="mecanum/motor/front/right" />
+            <param name="motor" type="string" value="front/right" />
+        </node>
+
+        <node name="i2c_rear_left" pkg="motor_i2c" type="motor_i2c.py">
+            <remap from="motor" to="mecanum/motor/rear/left" />
+            <param name="motor" type="string" value="rear/left" />
+        </node>
+
+        <node name="i2c_rear_right" pkg="motor_i2c" type="motor_i2c.py">
+            <remap from="motor" to="mecanum/motor/rear/right" />
+            <param name="motor" type="string" value="rear/right" />
+        </node>
+    </group>
+
+
+</launch>
