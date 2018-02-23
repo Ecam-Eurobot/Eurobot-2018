@@ -62,8 +62,9 @@ while True:
     # has stabilised by computing the standard deviation
     # of the last 30 samples compared to the total range
     if len(data['output']) > 60:
-        sd = statistics.stdev(data['output'][:-30])
+        sd = statistics.stdev(data['output'][-30:])
         trange = max_value - min_value
+        print(str(sd) + ", " + str(trange))
         if sd <= 0.01 * trange:
             break
 
