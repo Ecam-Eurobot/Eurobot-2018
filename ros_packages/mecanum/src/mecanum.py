@@ -37,10 +37,10 @@ if __name__ == '__main__':
         rospy.init_node('mecanum')
 
         # Get parameters about the geometry of the wheels
-        WHEEL_SEPARATION_WIDTH = rospy.get_param("wheel/separation/horizontal")
-        WHEEL_SEPARATION_LENGTH = rospy.get_param("wheel/separation/vertical")
+        WHEEL_SEPARATION_WIDTH = rospy.get_param("/wheel/separation/horizontal")
+        WHEEL_SEPARATION_LENGTH = rospy.get_param("/wheel/separation/vertical")
         WHEEL_GEOMETRY = (WHEEL_SEPARATION_WIDTH + WHEEL_SEPARATION_LENGTH) / 2
-        WHEEL_RADIUS = rospy.get_param("wheel/diameter") / 2
+        WHEEL_RADIUS = rospy.get_param("/wheel/diameter") / 2
 
 
         pub_mfl = rospy.Publisher('motor/front/left', Float32, queue_size=1)
