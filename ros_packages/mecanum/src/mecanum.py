@@ -43,10 +43,10 @@ if __name__ == '__main__':
         WHEEL_RADIUS = rospy.get_param("wheel/diameter") / 2
 
 
-        pub_mfl = rospy.Publisher('mecanum/motor/front/left', Float32, queue_size=1)
-        pub_mfr = rospy.Publisher('mecanum/motor/front/right', Float32, queue_size=1)
-        pub_mbl = rospy.Publisher('mecanum/motor/rear/left', Float32, queue_size=1)
-        pub_mbr = rospy.Publisher('mecanum/motor/rear/right', Float32, queue_size=1)
+        pub_mfl = rospy.Publisher('motor/front/left', Float32, queue_size=1)
+        pub_mfr = rospy.Publisher('motor/front/right', Float32, queue_size=1)
+        pub_mbl = rospy.Publisher('motor/rear/left', Float32, queue_size=1)
+        pub_mbr = rospy.Publisher('motor/rear/right', Float32, queue_size=1)
 
         sub = rospy.Subscriber('cmd_vel', Twist, convert)
         rospy.spin()
