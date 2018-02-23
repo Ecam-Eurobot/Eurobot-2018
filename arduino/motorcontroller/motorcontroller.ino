@@ -2,57 +2,55 @@
 #include <PID_v1.h>
 #include <ecamlib.h>
 
+#include <Encoder.h>
 #include <FlexiTimer2.h>
-#include <digitalWriteFast.h> 
 
 const char I2C_ADDRESS = 0x08;
+
+// Defines the pins to control the motor driver
+// pin 5 conrols the voltage to the motor by a PWM
+// pin 4 controls the direction of the motor
+const int PWM = 5;
+const int DIR = 4;
+
+Encoder motor_encoder = Encoder(2, 3);
+const int ENCODER_TICKS_PER_REV = 3200;
+
+// Defines the time between two samples in miliseconds
+const int CADENCE_MS = 50;
+volatile double dt = CADENCE_MS / 1000.;
 
 // Configuration
 bool enabled = false;   // Enable motor output
 bool timeout = false;   // Enable timeout to stop the motors if no command for some time
 
 // Motor control variables and PID configuration
-float motor_speed = 0.0;
-float gain_p = 1.0;
-float gain_i = 2.0;
+float motor_speed = 6.28319;
+float gain_p = 15.0;
+float gain_i = 5.0;
 float gain_d = 0.5;
 
+// Angular velocity
 volatile double omega;
 
+// PID 
 double Setpoint, Input, Output;
-// Parameter working but slow myPID(&Input, &Output, &Setpoint,1,2,0.5, DIRECT);
 PID myPID(&Input, &Output, &Setpoint,gain_p,gain_i,gain_d, DIRECT);
 
-// Incremental encoder pins
-int interrupPinEncoderA = 3; // Corresponding to the interrupt pin 0 for Arduino
-int interrupPinEncoderB = 2; // Corresponding to the interrupt pin 1 for Arduino 
-
-volatile long ticksCodeur = 0;
-
-// Motor configuration 
-int PWM1 = 5; // PWM control of motor 1 - Arduino Pin 5
-int DIR1 = 4; // Direction of the motor LOW or HIGH - Arduino Pin 2
-
-// Sampling cadence (ms)
-#define CADENCE_MS 50
-volatile double dt = CADENCE_MS/1000.;
-volatile double temps = -CADENCE_MS/1000.;
+// Variable to keep track of the old encoder value
+volatile long old_encoder = 0;
 
 void setup() {
     Wire.begin(I2C_ADDRESS);      // join i2c bus
     Wire.onReceive(receiveEvent); // register callback for when we receive data
+   
     Serial.begin(9600);
-    Serial.flush();
 
-    pinMode(PWM1,OUTPUT); 
-    pinMode(DIR1,OUTPUT);
+    // set timer 0 divisor to 1 for PWM frequency of 62500.00 Hz
+    TCCR0B = TCCR0B & B11111000 | B00000001;
 
-    pinMode(interrupPinEncoderA, INPUT);      // Encoder1 Pin A (Digital) 
-    pinMode(interrupPinEncoderB, INPUT);      // Encoder1 Pin B (Digital)
-    attachInterrupt(1, GestionInterruptionCodeurPinA, CHANGE); // Interruption routine configuration
-    attachInterrupt(0, GestionInterruptionCodeurPinB, CHANGE); // Interruption routine configuration
-
-    ticksCodeur = 0; // Encoder pulse counter
+    pinMode(PWM,OUTPUT); 
+    pinMode(DIR,OUTPUT);
     
     FlexiTimer2::set(CADENCE_MS, 1/1000., isrt); // Periodic execution of isrt() function
     FlexiTimer2::start();
@@ -61,25 +59,27 @@ void setup() {
     myPID.SetSampleTime(CADENCE_MS);
 
     // Motor direction 
-    digitalWrite(DIR1,LOW);
+    digitalWrite(DIR,LOW);
         
 }
 
 void loop() {
-    
-    Setpoint = (double)(abs(motor_speed));
-    if (motor_speed > 0) {digitalWrite(DIR1,LOW);}
-    else {digitalWrite(DIR1,HIGH);}
+    Setpoint = (double) (abs(motor_speed));
+    if (motor_speed > 0) {
+        digitalWrite(DIR, LOW);
+    } else {
+        digitalWrite(DIR, HIGH);
+    }
     
     Input = abs(omega);
     
     myPID.Compute();
     
-    analogWrite(PWM1, Output);
+    analogWrite(PWM, Output);
     
     Serial.print("Omega : ");
     Serial.println(omega);
-    delay(1);
+    delay(CADENCE_MS);
 }
 
 // function that executes whenever data is received from master
@@ -160,27 +160,9 @@ void receiveEvent(int howMany) {
 
 // Speed measurement 
 void isrt(){
-  int codeurDeltaPos;
- 
-   // Number of ticks since last time
-  codeurDeltaPos = ticksCodeur;
-  ticksCodeur = 0;
- 
-  // Speed calculation 
-  omega = ((2.*3.141592*((double)codeurDeltaPos))/1920)/dt;  // rad/s
-
-  temps += dt;
-}
-
-
-// Interruption routine attached to the encoder channel A
-void GestionInterruptionCodeurPinA(){
-  if (digitalReadFast2(interrupPinEncoderA) == digitalReadFast2(interrupPinEncoderB)) {ticksCodeur--;}
-  else {ticksCodeur++;}
-}
-
-// Interruption routine attached to the encoder channel A
-void GestionInterruptionCodeurPinB(){
-  if (digitalReadFast2(interrupPinEncoderA) == digitalReadFast2(interrupPinEncoderB)) {ticksCodeur++;}
-  else {ticksCodeur--;}
+    int deltaEncoder = motor_encoder.read() - old_encoder;
+    old_encoder = motor_encoder.read();
+    
+    // Angular velocity 
+    omega = ( (2.0 * 3.141592 * (double)deltaEncoder) / ENCODER_TICKS_PER_REV ) / dt;  // rad/s
 }
