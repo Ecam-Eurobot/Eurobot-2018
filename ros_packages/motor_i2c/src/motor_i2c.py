@@ -8,7 +8,12 @@ from i2c import I2C
 pub = None
 
 def motor_front_left(angular_velocity):
-    robot_i2c.send(angular_velocity.data)
+    # Tranform the value into a list of bytes
+    data_bytes = list(bytearray(struct.pack('f', angular_velocity.data)))
+
+    # Insert the register the motor controller uses for the angular velocity
+    data_bytes.insert(0, 0x10)
+    robot_i2c.send(data_bytes)
 
 if __name__ == '__main__':
     try:
