@@ -1,17 +1,24 @@
 import serial
 import sys
+import argparse
 import time
 import statistics
 import datetime
 import scipy.io
 
-if len(sys.argv) < 2:
-    print("You need to provide a serial port for the Arduino. For example:")
-    print("    python acquire.py \"/dev/ttyACM0\"")
-    sys.exit()
+# Command line argument parser
+desc = 'This script allows to acquire data representing a step response from a motor through an Arduino'
 
-serial_port = sys.argv[1]
-sample_time = sys.argv[2] if len(sys.argv) > 2 else 10
+parser = argparse.ArgumentParser(description=desc)
+parser.add_argument('serial', nargs=1, help="Specify the serial port of the Arduino")
+parser.add_argument('-o', '--output', nargs=1, help="Secifies the destination of the output file")
+parser.add_argument('--sampling', nargs=1, help="Changes the time between samples in ms")
+
+args = parser.parse_args() 
+
+serial_port = args.serial[0]
+sampling_time = args.sampling[0] if args.sampling else 10
+dest = args.output[0] if args.output else '../data/' + datetime.datetime.now().strftime("%Y-%m-%d-%H%M%S")
 
 try:
     arduino = serial.Serial(serial_port, timeout=1, baudrate=19200)
@@ -37,7 +44,7 @@ min_value = 1000
 max_value = 0
 
 while True:
-    time.sleep(sample_time / 1000)
+    time.sleep(sampling_time / 1000)
     received = arduino.readline().strip(b'\n').strip(b'\r').split(b',')
 
     t = float(received[0])
@@ -60,7 +67,7 @@ while True:
         if sd <= 0.01 * trange:
             break
 
-scipy.io.savemat('../data/' + datetime.datetime.now().strftime("%Y-%m-%d-%H%M%S") + '.mat', mdict={
+scipy.io.savemat(dest + '.mat', mdict={
     'time': data['time'],
     'input': data['input'],
     'output': data['output']
