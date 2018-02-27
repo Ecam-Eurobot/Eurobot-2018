@@ -1,5 +1,4 @@
 #include <Wire.h>
-//#include <Servo.h>
 #include <BallSeparationLib.h>
 #include <ecamlib.h>
 
@@ -56,17 +55,6 @@ void receiveEvent(int numBytes) {
                   unsigned char b1 = Wire.read();
                   cmd_ServoPos = bytesToInt(b0,b1);
                   servoComputePos(cmd_ServoPos);
-                  
-                  /*if(cmd_ServoPos == 1){
-                    //Clean ball collection
-                    servoAngle = 90;
-                    servo.write(servoAngle);
-                    }
-                  if(cmd_ServoPos == 2){
-                    //Dirty ball collection
-                    servoAngle = 0;
-                    servo.write(servoAngle);
-                    }  */
                 }
                 break;
 
