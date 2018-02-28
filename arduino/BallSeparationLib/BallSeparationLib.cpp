@@ -55,40 +55,42 @@ const char* csCheckTeamColor(void)
 	uint16_t upperrangeO[3] = {216,75,44};
 	uint16_t lowerrangeO[3] = {155, 60, 32};  
 	float r, g, b;
-	const char* teamColour;
+	const char* teamColour = "";
+	while(teamColour == ""){
+		Serial.println("Waiting for team colour...");
+		tcs.setInterrupt(false);      // turn on LED
+		delay(60);                    // takes 50ms to read                  
+		tcs.getRawData(&red, &green, &blue, &clear);               
+		tcs.setInterrupt(true);      // turn off LED
 
-	tcs.setInterrupt(false);      // turn on LED
-	delay(60);                    // takes 50ms to read                  
-	tcs.getRawData(&red, &green, &blue, &clear);               
-	tcs.setInterrupt(true);      // turn off LED
+		// Figure out some basic hex code for visualization
+		uint32_t sum = clear;
+		r = red; 
+		r /= sum;
+		g = green; 
+		g /= sum;
+		b = blue; 
+		b /= sum;
+		r *= 256; g *= 256; b *= 256;
+		Serial.print("\t");
+		
 
-	// Figure out some basic hex code for visualization
-	uint32_t sum = clear;
-	r = red; 
-	r /= sum;
-	g = green; 
-	g /= sum;
-	b = blue; 
-	b /= sum;
-	r *= 256; g *= 256; b *= 256;
-	Serial.print("\t");
-	
+		Serial.print((int)r, HEX); Serial.print((int)g, HEX); Serial.print((int)b, HEX);
+		Serial.println();
+		Serial.print((int)r ); Serial.print(" "); Serial.print((int)g);Serial.print(" ");  Serial.println((int)b );
 
-	Serial.print((int)r, HEX); Serial.print((int)g, HEX); Serial.print((int)b, HEX);
-	Serial.println();
-	Serial.print((int)r ); Serial.print(" "); Serial.print((int)g);Serial.print(" ");  Serial.println((int)b );
-
-	if((r < upperrangeG[0] && g < upperrangeG[1] && b < upperrangeG[2]) || (r > lowerrangeG[0] && g > lowerrangeG[1] && b > lowerrangeG[2])){
-	  delay(100);
-	  teamColour = "Green";
-	  //Serial.print("Green");
-	}
-	if((r < upperrangeO[0] && g < upperrangeO[1] && b < upperrangeO[2]) || (r > lowerrangeO[0] && g > lowerrangeO[1] && b > lowerrangeO[2])){
-	  delay(100);
-	  teamColour= "Orange";
-	  //Serial.print("Orange");
-	}
-	
+		if((r < upperrangeG[0] && g < upperrangeG[1] && b < upperrangeG[2]) || (r > lowerrangeG[0] && g > lowerrangeG[1] && b > lowerrangeG[2])){
+		  delay(100);
+		  teamColour = "Green";
+		  //Serial.print("Green");
+		}
+		if((r < upperrangeO[0] && g < upperrangeO[1] && b < upperrangeO[2]) || (r > lowerrangeO[0] && g > lowerrangeO[1] && b > lowerrangeO[2])){
+		  delay(100);
+		  teamColour= "Orange";
+		  //Serial.print("Orange");
+		}
+		
+	}	
 	return teamColour;
 }
 
