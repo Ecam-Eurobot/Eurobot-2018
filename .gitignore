@@ -3,4 +3,4 @@
 .idea
 
 # Python
-.pyc
+*.pyc
