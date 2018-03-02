@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Cortex">
+
+    <!-- Constants -->
+    <xacro:property name="PI" value="3.1415926535897931" />
+
+    <!-- Base -->
+    <xacro:property name="base_width" value="0.2" />
+    <xacro:property name="base_length" value="0.15" />
+    <xacro:property name="base_height" value="0.06" />
+    <xacro:property name="base_ground_offset" value="0.01" />
+    <xacro:property name="top_height" value="0.2" />
+
+    <!-- Wheels -->
+    <xacro:property name="wheel_radius" value="0.03" />
+    <xacro:property name="wheel_width" value="0.04" />
+
+
+    <link name="base">
+        <visual>
+            <geometry>
+                <box size="${base_length} ${base_width - 0.002} ${base_height}"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 ${base_height/2 + base_ground_offset}"/>
+            <material name="white">
+                <color rgba="1 1 1 1"/>
+            </material>
+        </visual>
+    </link>
+
+
+
+    <xacro:macro name="wheel" params="suffix offset_x offset_y">
+        <link name="wheel_${suffix}">
+            <visual>
+                <geometry>
+                    <cylinder length="${wheel_width}" radius="${wheel_radius}"/>
+                </geometry>
+                <origin rpy="${PI/2} 0 0" xyz="${offset_x} ${offset_y} ${wheel_radius}"/>
+                <material name="black">
+                    <color rgba="0 0 0 1"/>
+                </material>
+            </visual>
+        </link>
+
+        <joint name="base_to_wheel_${suffix}" type="fixed">
+            <parent link="base"/>
+            <child link="wheel_${suffix}"/>
+            <origin xyz="0 0 0"/>
+        </joint>
+    </xacro:macro>
+
+    <xacro:wheel suffix="front_left" offset_x="${base_length/2 - wheel_radius}" offset_y="${-(base_width/2 - wheel_width/2)}"/>
+    <xacro:wheel suffix="front_right" offset_x="${base_length/2 - wheel_radius}" offset_y="${base_width/2 - wheel_width/2}"/>
+    <xacro:wheel suffix="rear_left" offset_x="${-(base_length/2 - wheel_radius)}" offset_y="${-(base_width/2 - wheel_width/2)}"/>
+    <xacro:wheel suffix="rear_right" offset_x="${-(base_length/2 - wheel_radius)}" offset_y="${base_width/2 - wheel_width/2}"/>
+
+</robot>
