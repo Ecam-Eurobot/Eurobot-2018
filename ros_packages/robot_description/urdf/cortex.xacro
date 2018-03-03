@@ -16,7 +16,7 @@
     <xacro:property name="wheel_width" value="0.04" />
 
 
-    <link name="base">
+    <link name="base_link">
         <visual>
             <geometry>
                 <box size="${base_length} ${base_width - 0.002} ${base_height}"/>
@@ -27,6 +27,25 @@
             </material>
         </visual>
     </link>
+
+    <link name="top">
+        <visual>
+            <geometry>
+                <box size="${base_length} ${base_width - 0.002} ${top_height}"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 ${base_height + base_ground_offset + top_height/2}"/>
+            <material name="pink">
+                <color rgba="1 0.7 0.7 1"/>
+            </material>
+        </visual>
+    </link>
+
+    <joint name="base_link_to_top" type="fixed">
+        <parent link="base_link"/>
+        <child link="top"/>
+        <origin xyz="0 0 0"/>
+    </joint>
+
 
 
 
@@ -43,8 +62,8 @@
             </visual>
         </link>
 
-        <joint name="base_to_wheel_${suffix}" type="fixed">
-            <parent link="base"/>
+        <joint name="base_link_to_wheel_${suffix}" type="fixed">
+            <parent link="base_link"/>
             <child link="wheel_${suffix}"/>
             <origin xyz="0 0 0"/>
         </joint>
