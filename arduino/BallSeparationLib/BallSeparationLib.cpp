@@ -12,6 +12,15 @@
 #include <stdlib.h>
 #include "BallSeparationLib.h"
 
+//Dynamixel AX-12A definitions
+#define DirectionPin  (10u)
+#define BaudRate    (1000000ul)
+#define ID    (8u)
+
+int clean_ball_position = 180;
+int dirty_ball_position = 0;
+int initial_position = 90;
+
 // Create cs object and Initialise with specific values
 // (int time = 50ms, gain = 4x) 
 Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_50MS, TCS34725_GAIN_4X);
@@ -111,4 +120,21 @@ void servoComputePos(int position)
 		servoAngle = 0;
 		servo.write(servoAngle);
 	} 
+}
+
+void ax12Start(int speed)
+{
+	ax12a.begin(BaudRate, DirectionPin, &Serial);
+	ax12a.setEndless(ID, OFF);
+	//move into initial position
+	ax12a.moveSpeed(ID, initial_position, speed);
+}
+
+void ax12ComputePos(int position, int speed)
+{
+	if(position == 1){
+		ax12a.moveSpeed(ID, clean_ball_position, speed);
+	} else{
+		ax12a.moveSpeed(ID, dirty_ball_position, speed);
+	}
 }

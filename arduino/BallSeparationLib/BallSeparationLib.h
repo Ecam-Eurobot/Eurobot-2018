@@ -7,9 +7,16 @@
 
 #include <Adafruit_TCS34725.h>
 #include <Servo.h>
+#include <AX12A.h>
+
+#define DirectionPin  (10u)
+#define BaudRate    (1000000ul)
+#define ID    (8u)
 
 //Functions
 int     csStartUpRoutine(void);
 const char*     csCheckTeamColor(void);
 void     servoComputePos(int position);
 void     servoStart(void);
+void     ax12Start(int speed);
+void     ax12ComputePos(int position, int speed);

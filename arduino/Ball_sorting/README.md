@@ -21,8 +21,10 @@ and direct control over the position of a servo motor.
 
 **ecamlib.h**	Cross reference installation guide/readme for ecamlib	
 
-**Adafruit_TCS34725.h**	Needs to be dowloaded and installed as described here: 
+**Adafruit_TCS34725.h**	Colour sensor. Needs to be dowloaded and installed as described here: 
 						https://learn.adafruit.com/adafruit-color-sensors/arduino-code
+						
+**AX12A.h**	Dynamixel AX-12A library. Can be downloaded and installed here: https://github.com/ThingType/AX-12A-servo-library	
 
 ### Install
 
