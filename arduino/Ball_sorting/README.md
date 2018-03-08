@@ -15,7 +15,6 @@ Currently, it contains functions to identify the team's colour for the robot
 and direct control over the position of a servo motor.
 
 ### Dependencies
-`BallSeparationLib` uses the following libraries:
 
 **Servo.h**		Already installed in Arduino IDE
 
