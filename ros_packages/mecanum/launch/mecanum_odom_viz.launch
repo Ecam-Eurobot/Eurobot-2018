@@ -3,12 +3,8 @@
     <arg name="model" default="$(find robot_description)/urdf/cortex.xacro"/>
     <arg name="rvizconfig" default="$(find mecanum)/rviz/robot.rviz" />
 
+    <rosparam command="load" file="$(find mecanum)/param/mecanum.yaml" />
     <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
-
-    <param name="encoder/ticks_per_rev" type="int" value="3200" />
-    <param name="wheel/diameter" type="double" value="0.06" />
-    <param name="wheel/separation/vertical" type="double" value="0.15" />
-    <param name="wheel/separation/horizontal" type="double" value="0.15" />
 
     <node name="encoder_odom" pkg="mecanum" type="encoder_odom.py" />
 
