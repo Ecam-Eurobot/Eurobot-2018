@@ -21,10 +21,10 @@ def convert(move):
     y = move.linear.y
     rot = move.angular.z
 
-    front_right = - (y - x + rot * WHEEL_GEOMETRY) / WHEEL_RADIUS
-    back_right = - (y + x + rot * WHEEL_GEOMETRY) / WHEEL_RADIUS
-    back_left = (y - x + rot * WHEEL_GEOMETRY) / WHEEL_RADIUS
     front_left = (y + x + rot * WHEEL_GEOMETRY) / WHEEL_RADIUS
+    front_right = - (y - x + rot * WHEEL_GEOMETRY) / WHEEL_RADIUS
+    back_left = (y - x + rot * WHEEL_GEOMETRY) / WHEEL_RADIUS
+    back_right = - (y + x + rot * WHEEL_GEOMETRY) / WHEEL_RADIUS
 
     pub_mfl.publish(front_left)
     pub_mfr.publish(front_right)

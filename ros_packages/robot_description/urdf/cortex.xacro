@@ -6,15 +6,15 @@
     <xacro:property name="PI" value="3.1415926535897931" />
 
     <!-- Base -->
-    <xacro:property name="base_size_x" value="0.2" />
-    <xacro:property name="base_size_y" value="0.15" />
-    <xacro:property name="base_size_z" value="0.06" />
+    <xacro:property name="base_size_width" value="0.2" />
+    <xacro:property name="base_size_length" value="0.15" />
+    <xacro:property name="base_size_height" value="0.06" />
     <xacro:property name="base_ground_offset" value="0.01" />
 
     <xacro:property name="base_mass" value="1" />
 
     <!-- Top -->
-    <xacro:property name="top_size_z" value="0.2" />
+    <xacro:property name="top_size_height" value="0.2" />
     <xacro:property name="top_mass" value="2" />
 
     <!-- Wheels -->
@@ -65,9 +65,9 @@
     <link name="base_link">
         <visual>
             <geometry>
-                <box size="${base_size_x - 0.002} ${base_size_y} ${base_size_z}"/>
+                <box size="${base_size_length} ${base_size_width - 0.002} ${base_size_height}"/>
             </geometry>
-            <origin rpy="0 0 0" xyz="0 0 ${base_size_z/2 + base_ground_offset}"/>
+            <origin rpy="0 0 0" xyz="0 0 ${base_size_height/2 + base_ground_offset}"/>
             <material name="white">
                 <color rgba="1 1 1 1"/>
             </material>
@@ -75,19 +75,19 @@
 
         <collision>
             <geometry>
-                <box size="${base_size_x - 0.002} ${base_size_y} ${base_size_z}"/>
+                <box size="${base_size_length} ${base_size_width - 0.002} ${base_size_height}"/>
             </geometry>
         </collision>
 
-        <xacro:box_inertial mass="${base_mass}" x="${base_size_x}" y="${base_size_y}" z="${base_size_z}"/>
+        <xacro:box_inertial mass="${base_mass}" x="${base_size_length}" y="${base_size_width}" z="${base_size_height}"/>
     </link>
 
     <link name="top">
         <visual>
             <geometry>
-                <box size="${base_size_x - 0.002} ${base_size_y} ${top_size_z}"/>
+                <box size="${base_size_length} ${base_size_width - 0.002} ${top_size_height}"/>
             </geometry>
-            <origin rpy="0 0 0" xyz="0 0 ${base_size_z + base_ground_offset + top_size_z/2}"/>
+            <origin rpy="0 0 0" xyz="0 0 ${base_size_height + base_ground_offset + top_size_height/2}"/>
             <material name="pink">
                 <color rgba="1 0.7 0.7 1"/>
             </material>
@@ -95,11 +95,11 @@
 
         <collision>
             <geometry>
-                <box size="${base_size_x - 0.002} ${base_size_y} ${top_size_z}"/>
+                <box size="${base_size_length} ${base_size_width - 0.002} ${top_size_height}"/>
             </geometry>
         </collision>
 
-        <xacro:box_inertial mass="${top_mass}" x="${base_size_x}" y="${base_size_y}" z="${top_size_z}"/>
+        <xacro:box_inertial mass="${top_mass}" x="${base_size_length}" y="${base_size_width}" z="${top_size_height}"/>
     </link>
 
     <joint name="base_link_to_top" type="fixed">
@@ -117,7 +117,7 @@
                 <geometry>
                     <cylinder length="${wheel_width}" radius="${wheel_radius}"/>
                 </geometry>
-                <origin rpy="0 ${PI/2} 0" /> <!-- xyz="${offset_x} ${offset_y} ${wheel_radius}" -->
+                <origin rpy="${PI/2} 0 0" /> <!-- xyz="${offset_x} ${offset_y} ${wheel_radius}" -->
                 <material name="black">
                     <color rgba="0 0 0 1"/>
                 </material>
@@ -129,15 +129,15 @@
         <joint name="base_link_to_wheel_${suffix}" type="continuous">
             <parent link="base_link"/>
             <child link="wheel_${suffix}"/>
-            <axis xyz="1 0 0"/>
+            <axis xyz="0 1 0"/>
             <origin xyz="${offset_x} ${offset_y} ${wheel_radius}"/>
             <limit effort ="${motor_max_torque}" velocity="${motor_max_velocity}"/>
         </joint>
     </xacro:macro>
 
-    <xacro:wheel suffix="front_left" offset_y="${base_size_y/2 - wheel_radius}" offset_x="${-(base_size_x/2 - wheel_width/2)}"/>
-    <xacro:wheel suffix="front_right" offset_y="${base_size_y/2 - wheel_radius}" offset_x="${base_size_x/2 - wheel_width/2}"/>
-    <xacro:wheel suffix="rear_left" offset_y="${-(base_size_y/2 - wheel_radius)}" offset_x="${-(base_size_x/2 - wheel_width/2)}"/>
-    <xacro:wheel suffix="rear_right" offset_y="${-(base_size_y/2 - wheel_radius)}" offset_x="${base_size_x/2 - wheel_width/2}"/>
+    <xacro:wheel suffix="front_left" offset_x="${base_size_length/2 - wheel_radius}" offset_y="${-(base_size_width/2 - wheel_width/2)}"/>
+    <xacro:wheel suffix="front_right" offset_x="${base_size_length/2 - wheel_radius}" offset_y="${base_size_width/2 - wheel_width/2}"/>
+    <xacro:wheel suffix="rear_left" offset_x="${-(base_size_length/2 - wheel_radius)}" offset_y="${-(base_size_width/2 - wheel_width/2)}"/>
+    <xacro:wheel suffix="rear_right" offset_x="${-(base_size_length/2 - wheel_radius)}" offset_y="${base_size_width/2 - wheel_width/2}"/>
 
 </robot>
