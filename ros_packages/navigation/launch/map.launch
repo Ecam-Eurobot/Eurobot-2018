@@ -1,0 +1,7 @@
+<launch>
+    <arg name="map_file" default="$(find navigation)/map/eurobot-map.yaml" />
+
+    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+    <node name="map_tf" pkg="tf" type="static_transform_publisher"
+          args="0 0 0 0 0 0 map odom 100" />
+</launch>

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
     <arg name="model" default="$(find robot_description)/urdf/cortex.xacro"/>
-    <arg name="rvizconfig" default="$(find robot_description)/rviz/urdf.rviz" />
+    <arg name="rvizconfig" default="$(find mecanum)/rviz/robot.rviz" />
 
     <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
 
