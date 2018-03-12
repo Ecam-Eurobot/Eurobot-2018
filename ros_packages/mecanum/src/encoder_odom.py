@@ -4,7 +4,7 @@ import rospy
 import tf
 from sensor_msgs.msg import JointState
 from nav_msgs.msg import Odometry
-from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3
+from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3, PoseWithCovarianceStamped
 from ecam_msg.msg import Encoders
 
 from math import cos, sin, pi
@@ -163,6 +163,25 @@ def update(encoder):
     time = new_time
 
 
+def reset(initialpose):
+    global x, y, th, vx,vy, vth
+    x = initialpose.pose.pose.position.x
+    y = initialpose.pose.pose.position.y
+    th = initialpose.pose.pose.orientation.z
+
+    vx = 0.0
+    vy = 0.0
+    vth = 0.0
+
+    # Update
+    encoders = Encoders()
+    encoders.front_left = 0
+    encoders.front_right = 0
+    encoders.rear_left = 0
+    encoders.rear_right = 0
+
+    publish_joint_state(encoders, rospy.Time.now())
+
 if __name__ == '__main__':
     try:
         rospy.init_node('encoder_to_jointstate')
@@ -173,6 +192,8 @@ if __name__ == '__main__':
         WHEEL_SEPARATION_LENGTH = rospy.get_param("/wheel/separation/vertical")
 
         encoder_sub = rospy.Subscriber('encoder', Encoders, update)
+        initialpose_sub = rospy.Subscriber('initialpose', PoseWithCovarianceStamped, reset)
+
         joint_states_pub = rospy.Publisher('joint_states', JointState, queue_size=50)
         odom_pub = rospy.Publisher('odom', Odometry, queue_size=50)
 

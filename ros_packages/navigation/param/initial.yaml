@@ -1,0 +1,11 @@
+initialpose:
+    green:
+        coordinates:
+            x: 0.2
+            y: -0.2
+        orientation: 0
+    red:
+        coordinates:
+            x: 2.8
+            y: -0.2
+        orientation: 0
