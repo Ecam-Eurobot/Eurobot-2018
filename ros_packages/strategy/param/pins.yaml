@@ -1,0 +1,4 @@
+pins:
+    team_switch: 26
+    team_feedback_led: 19
+    reset_button: 13
