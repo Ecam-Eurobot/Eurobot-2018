@@ -25,22 +25,25 @@ pin_reset = rospy.get_param("/pins/reset_button")
 
 GPIO.setup(pin_team, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(pin_team_feedback, GPIO.OUT)
-GPIO.setup(pin_reset, GPIO.IN)
+GPIO.setup(pin_reset, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
-def update_team():
+def update_team(pin):
     if GPIO.input(pin_team):
         rospy.set_param("/team", "green")
     else:
         rospy.set_param("/team", "red")
 
-def reset():
+def reset(pin):
     reset_pub.publish(Empty())
 
 
 GPIO.add_event_detect(pin_team, GPIO.BOTH, callback=update_team)
 GPIO.add_event_detect(pin_reset, GPIO.RISING, callback=reset)
 
+# Update team on startupand reset
+update_team(pin_team)
+reset(pin_reset)
 
 reset_pub = rospy.Publisher('initialpose/reset', Empty, queue_size=1)
 
