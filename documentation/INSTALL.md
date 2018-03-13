@@ -62,6 +62,30 @@ to source. For convenience, add the following line to your `.bashrc`
 source ~/eurobot_ws/devel/setup.bash
 ```
 
+### ROS dependencies
+
+The following dependencies need to be installed:
+
+#### [rosserial](http://wiki.ros.org/rosserial)
+```
+sudo apt-get install ros-kinetic-rosserial
+```
+
+#### [rosserial-arduino](http://wiki.ros.org/rosserial_arduino)
+[(setup tutorial)](http://wiki.ros.org/rosserial_arduino/Tutorials/Arduino%20IDE%20Setup)
+```
+sudo apt-get install ros-kinetic-rosserial-arduino
+```
+#### [map_server](http://wiki.ros.org/map_server)
+```
+sudo apt-get install ros-kinetic-map-server
+```
+
+#### [move_base](http://wiki.ros.org/move_base)
+```
+sudo apt-get install ros-kinetic-move-base
+```
+
 ## Source code
 
 ### Cloning the repository
@@ -70,3 +94,4 @@ The next step is to clone the repository containing our code:
 cd ~/eurobot_ws/src/
 git clone https://github.com/Ecam-Eurobot/Eurobot-2018.git
 ```
+
