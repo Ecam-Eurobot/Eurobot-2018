@@ -1,5 +1,6 @@
 <launch>
     <arg name="simulate_motors" default="false" />
+    <arg name="raspberry" default="false" />
     <arg name="viz" default="false" />
     <arg name="model" default="$(find robot_description)/urdf/cortex.xacro"/>
     <arg name="rvizconfig" default="$(find mecanum)/rviz/robot.rviz" />
@@ -9,6 +10,7 @@
 
     <include file="$(find navigation)/launch/map.launch" />
     <include file="$(find navigation)/launch/initialpose.launch" />
+    <include if="raspberry" file="$(find strategy)/launch/startup_conf.launch" />
 
     <node name="mecanum" pkg="mecanum" type="mecanum.py" />
     <node name="encoder_odom" pkg="mecanum" type="encoder_odom.py" />
