@@ -1,0 +1,143 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Cortex">
+
+    <!-- Constants -->
+    <!-- All physical properties use the metric system -->
+    <xacro:property name="PI" value="3.1415926535897931" />
+
+    <!-- Base -->
+    <xacro:property name="base_size_width" value="0.2" />
+    <xacro:property name="base_size_length" value="0.15" />
+    <xacro:property name="base_size_height" value="0.06" />
+    <xacro:property name="base_ground_offset" value="0.01" />
+
+    <xacro:property name="base_mass" value="1" />
+
+    <!-- Top -->
+    <xacro:property name="top_size_height" value="0.2" />
+    <xacro:property name="top_mass" value="2" />
+
+    <!-- Wheels -->
+    <xacro:property name="wheel_radius" value="0.03" />
+    <xacro:property name="wheel_width" value="0.04" />
+    <xacro:property name="wheel_mass" value="0.086" />
+
+    <!-- Motors -->
+    <!-- Polulu motor:  https://www.pololu.com/product/2824/specs -->
+    <!-- Max torque: 170 oz·in = 1.2 Nm -->
+    <xacro:property name="motor_max_torque" value="1.2" />
+    <!-- Max velocity: 200 rpm = 20 rad/s -->
+    <xacro:property name="motor_max_velocity" value="20" />
+
+
+    <!-- Macros for inertia -->
+    <xacro:macro name="default_inertial" params="mass">
+        <inertial>
+            <mass value="${mass}" />
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0"
+                     iyy="1.0" iyz="0.0"
+                     izz="1.0" />
+        </inertial>
+    </xacro:macro>
+
+    <xacro:macro name="box_inertial" params="mass x y z">
+        <inertial>
+            <mass value="${mass}" />
+            <inertia ixx="${1/12 * mass * (z**2 + y**2)}" ixy="0.0" ixz="0.0"
+                     iyy="${1/12 * mass * (x**2 + y**2)}" iyz="0.0"
+                     izz="${1/12 * mass * (x**2 + z**2)}" />
+        </inertial>
+    </xacro:macro>
+
+    <xacro:macro name="cylinder_inertial" params="mass r z">
+        <inertial>
+            <mass value="${mass}" />
+            <inertia ixx="${1/12 * mass * (3 * r**2 + z**2)}" ixy="0.0" ixz="0.0"
+                     iyy="${1/12 * mass * (3 * r**2 + z**2)}" iyz="0.0"
+                     izz="${1/2 * mass * r**2}" />
+        </inertial>
+    </xacro:macro>
+
+
+
+    <!-- Links -->
+
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <box size="${base_size_length} ${base_size_width - 0.002} ${base_size_height}"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 ${base_size_height/2 + base_ground_offset}"/>
+            <material name="white">
+                <color rgba="1 1 1 1"/>
+            </material>
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="${base_size_length} ${base_size_width - 0.002} ${base_size_height}"/>
+            </geometry>
+        </collision>
+
+        <xacro:box_inertial mass="${base_mass}" x="${base_size_length}" y="${base_size_width}" z="${base_size_height}"/>
+    </link>
+
+    <link name="top">
+        <visual>
+            <geometry>
+                <box size="${base_size_length} ${base_size_width - 0.002} ${top_size_height}"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 ${base_size_height + base_ground_offset + top_size_height/2}"/>
+            <material name="pink">
+                <color rgba="1 0.7 0.7 1"/>
+            </material>
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="${base_size_length} ${base_size_width - 0.002} ${top_size_height}"/>
+            </geometry>
+        </collision>
+
+        <xacro:box_inertial mass="${top_mass}" x="${base_size_length}" y="${base_size_width}" z="${top_size_height}"/>
+    </link>
+
+    <joint name="base_link_to_top" type="fixed">
+        <parent link="base_link"/>
+        <child link="top"/>
+        <origin xyz="0 0 0"/>
+    </joint>
+
+
+
+
+    <xacro:macro name="wheel" params="suffix offset_x offset_y">
+        <link name="wheel_${suffix}">
+            <visual>
+                <geometry>
+                    <cylinder length="${wheel_width}" radius="${wheel_radius}"/>
+                </geometry>
+                <origin rpy="${PI/2} 0 0" /> <!-- xyz="${offset_x} ${offset_y} ${wheel_radius}" -->
+                <material name="black">
+                    <color rgba="0 0 0 1"/>
+                </material>
+            </visual>
+
+            <xacro:cylinder_inertial mass="${wheel_mass}" r="${wheel_radius}" z="${wheel_width}"/>
+        </link>
+
+        <joint name="base_link_to_wheel_${suffix}" type="continuous">
+            <parent link="base_link"/>
+            <child link="wheel_${suffix}"/>
+            <axis xyz="0 1 0"/>
+            <origin xyz="${offset_x} ${offset_y} ${wheel_radius}"/>
+            <limit effort ="${motor_max_torque}" velocity="${motor_max_velocity}"/>
+        </joint>
+    </xacro:macro>
+
+    <xacro:wheel suffix="front_left" offset_x="${base_size_length/2 - wheel_radius}" offset_y="${-(base_size_width/2 - wheel_width/2)}"/>
+    <xacro:wheel suffix="front_right" offset_x="${base_size_length/2 - wheel_radius}" offset_y="${base_size_width/2 - wheel_width/2}"/>
+    <xacro:wheel suffix="rear_left" offset_x="${-(base_size_length/2 - wheel_radius)}" offset_y="${-(base_size_width/2 - wheel_width/2)}"/>
+    <xacro:wheel suffix="rear_right" offset_x="${-(base_size_length/2 - wheel_radius)}" offset_y="${base_size_width/2 - wheel_width/2}"/>
+
+</robot>

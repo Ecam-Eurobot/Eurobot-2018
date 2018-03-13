@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="model" default="$(find robot_description)/urdf/cortex.xacro"/>
+    <arg name="rvizconfig" default="$(find mecanum)/rviz/robot.rviz" />
+
+    <rosparam command="load" file="$(find mecanum)/param/mecanum.yaml" />
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+
+    <node name="encoder_odom" pkg="mecanum" type="encoder_odom.py" />
+
+    <param name="use_gui" value="false"/>
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+</launch>
