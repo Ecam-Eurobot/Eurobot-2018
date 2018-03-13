@@ -10,7 +10,7 @@
 
     <include file="$(find navigation)/launch/map.launch" />
     <include file="$(find navigation)/launch/initialpose.launch" />
-    <include if="raspberry" file="$(find strategy)/launch/startup_conf.launch" />
+    <include if="$(arg raspberry)" file="$(find strategy)/launch/startup_conf.launch" />
 
     <node name="mecanum" pkg="mecanum" type="mecanum.py" />
     <node name="encoder_odom" pkg="mecanum" type="encoder_odom.py" />
