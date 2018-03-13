@@ -7,6 +7,7 @@ from std_msgs.msg import Empty
 
 
 rospy.init_node('startup_conf')
+reset_pub = rospy.Publisher('initialpose/reset', Empty, queue_size=1)
 
 #
 #   GPIO PIN CONFIGURATIONS
@@ -45,7 +46,6 @@ GPIO.add_event_detect(pin_reset, GPIO.RISING, callback=reset)
 update_team(pin_team)
 reset(pin_reset)
 
-reset_pub = rospy.Publisher('initialpose/reset', Empty, queue_size=1)
 
 while not rospy.is_shutdown():
     pass
