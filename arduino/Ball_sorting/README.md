@@ -28,7 +28,7 @@ and direct control over the position of a servo motor.
 ### Install
 
 Cross-reference installation guide of **ecamlib.h**, `BallSeparationLib` can be
-installed in the same way either by **Zip**, **Copy**, or **SymLink**.
+installed in the same way either by **Zip**, **Copy**, or **SymLink** (recommended).
 
  
 ### Usage
