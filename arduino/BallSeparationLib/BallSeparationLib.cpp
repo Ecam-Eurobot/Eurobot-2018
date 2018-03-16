@@ -15,11 +15,14 @@
 //Dynamixel AX-12A definitions
 #define DirectionPin  (10u)
 #define BaudRate    (1000000ul)
-#define ID    (8u)
+#define ID1    (7u)
+#define ID2    (1u)
 
-int clean_ball_position = 180;
-int dirty_ball_position = 0;
-int initial_position = 90;
+const int clean_ball_position = 180;
+const int dirty_ball_position = 0;
+const int initial_pos_servo1 = 90;
+const int initial_pos_servo2 = 0;
+
 
 // Create cs object and Initialise with specific values
 // (int time = 50ms, gain = 4x) 
@@ -125,16 +128,41 @@ void servoComputePos(int position)
 void ax12Start(int speed)
 {
 	ax12a.begin(BaudRate, DirectionPin, &Serial);
-	ax12a.setEndless(ID, OFF);
+	//Remove endless rotation
+	ax12a.setEndless(ID1, OFF);
+	ax12a.setEndless(ID2, OFF);
 	//move into initial position
-	ax12a.moveSpeed(ID, initial_position, speed);
+	//ax12a.moveSpeed(ID1, initial_pos_servo1, speed);
+	//ax12a.moveSpeed(ID2, initial_pos_servo2, speed);
 }
 
-void ax12ComputePos(int position, int speed)
+void ax12ComputePos(unsigned char id, byte position, int speed)
 {
-	if(position == 1){
-		ax12a.moveSpeed(ID, clean_ball_position, speed);
-	} else{
-		ax12a.moveSpeed(ID, dirty_ball_position, speed);
+	if(id == ID1){
+		if(position == 0x01){
+			ax12a.moveSpeed(ID1, clean_ball_position, speed);
+		} else if(position == 0x02){
+			ax12a.moveSpeed(ID1, dirty_ball_position, speed);
+		}
 	}
+	if(id == ID2){
+		ax12a.moveSpeed(ID2, position, speed);
+	}
+}
+
+void ax12Blink(void)
+{
+	int counter;
+	ax12a.ledStatus(ID2, ON);
+	delay(10000);
+	ax12a.ledStatus(ID2, OFF);
+	delay(10000);
+	ax12a.ledStatus(ID1, ON);
+	delay(10000);
+	ax12a.ledStatus(ID1, OFF);
+	delay(10000);
+}
+
+void ax12Movedebug(unsigned char id, int position, int speed){
+	ax12a.moveSpeed(id, position, speed);
 }

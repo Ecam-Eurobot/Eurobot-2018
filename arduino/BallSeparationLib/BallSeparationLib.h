@@ -19,4 +19,6 @@ const char*     csCheckTeamColor(void);
 void     servoComputePos(int position);
 void     servoStart(void);
 void     ax12Start(int speed);
-void     ax12ComputePos(int position, int speed);
+void     ax12ComputePos(unsigned char id, byte position, int speed);
+void     ax12Blink(void);
+void     ax12Movedebug(unsigned char id, int position, int speed);
