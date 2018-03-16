@@ -1,0 +1,4 @@
+<launch>
+    <rosparam command="load" file="$(find strategy)/param/pins.yaml" />
+    <node name="startup_conf" pkg="strategy" type="startup_conf.py" />
+</launch>

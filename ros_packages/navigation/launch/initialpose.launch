@@ -1,0 +1,5 @@
+<launch>
+    <rosparam command="load" file="$(find navigation)/param/initial.yaml" />
+
+    <node name="initialpose" pkg="navigation" type="initial_position.py" output="screen" />
+</launch>
