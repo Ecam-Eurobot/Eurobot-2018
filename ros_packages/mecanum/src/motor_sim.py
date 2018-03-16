@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
-from std_msgs.msg import Float32
+from std_msgs.msg import Float32, Empty
 from ecam_msg.msg import Encoders
 
 from math import pi
@@ -34,6 +34,10 @@ def rear_right_velocity_update(vel):
     global  v_rr_target
     v_rr_target = vel.data
 
+def reset(empty):
+    global  encoders_msg
+    encoders_msg = Encoders()
+
 
 
 rospy.init_node('motor_sim')
@@ -44,6 +48,7 @@ rospy.Subscriber('motor/front/left', Float32, front_left_velocity_update)
 rospy.Subscriber('motor/front/right', Float32, front_right_velocity_update)
 rospy.Subscriber('motor/rear/left', Float32, rear_left_velocity_update)
 rospy.Subscriber('motor/rear/right', Float32, rear_right_velocity_update)
+rospy.Subscriber('initialpose/reset', Empty, reset)
 
 encoder_pub = rospy.Publisher('encoder', Encoders, queue_size=50)
 

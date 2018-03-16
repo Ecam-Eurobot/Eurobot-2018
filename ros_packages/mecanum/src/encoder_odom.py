@@ -157,6 +157,8 @@ def update(encoder):
     y += delta_y;
     th += delta_th;
 
+    # print(x, y, th, vx, vy, vth)
+
     broadcast_transform(x, y, th, new_time)
     publish_odom(x, y, th, vx, vy, vth, new_time)
 
@@ -165,13 +167,28 @@ def update(encoder):
 
 def reset(initialpose):
     global x, y, th, vx,vy, vth
+    global ticks_front_left,ticks_front_right, ticks_rear_left, ticks_rear_right
+    global position_front_left, position_front_right, position_rear_left, position_rear_right
+
     x = initialpose.pose.pose.position.x
     y = initialpose.pose.pose.position.y
     th = initialpose.pose.pose.orientation.z
 
+    print("Reset initial position to: {x: " + str(x) + ", y:" + str(y) + ", th:" + str(th) + "}")
+
     vx = 0.0
     vy = 0.0
     vth = 0.0
+
+    ticks_front_left = 0
+    ticks_front_right = 0
+    ticks_rear_left = 0
+    ticks_rear_right = 0
+
+    position_front_left = 0
+    position_front_right = 0
+    position_rear_left = 0
+    position_rear_right = 0
 
     # Update
     encoders = Encoders()
@@ -180,7 +197,7 @@ def reset(initialpose):
     encoders.rear_left = 0
     encoders.rear_right = 0
 
-    publish_joint_state(encoders, rospy.Time.now())
+    update(encoders)
 
 if __name__ == '__main__':
     try:
