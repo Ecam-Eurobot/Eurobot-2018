@@ -31,8 +31,9 @@
         <param name="port" value="/dev/ttyACM0"/>
         <param name="baud" value="57600" />
         <remap from="mecanum/encoder/reset" to="reset" />
-        <remap from="mecanum/encoder" to="encoder" />
+        <remap from="mecanum/encoder" to="arduino/encoder" />
     </node>
+    <node name="correct_encoders" pkg="mecanum" type="encoder_correct.py" />
 
     <!-- Simulation -->
     <group if="$(arg simulate_motors)">
