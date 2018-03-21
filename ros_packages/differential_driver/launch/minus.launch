@@ -1,8 +1,12 @@
 <launch>
   <!-- change this next line to include the launch file for your robot's hardware drivers: -->
-  <!-- <include file="$(find knex_ros)/launch/knex_arduino_ser.launch" /> -->
-  <node pkg="rosserial_python" type="serial_node.py" args="/dev/ttyACM0" name="serial_node0" respawn="true"/>
-  <node pkg="rosserial_python" type="serial_node.py" args="/dev/ttyACM1" name="serial_node1" respawn="true"/>
+  <include file="$(find minus_navigation)/launch/minus_nav.launch" />
+  <node pkg="rosserial_python" type="serial_node.py" args="/dev/ttyACM0" name="serial_node0" respawn="true">
+    <param name="baud" value="57600" />
+  </node>
+  <node pkg="rosserial_python" type="serial_node.py" args="/dev/ttyACM1" name="serial_node1" respawn="true">
+    <param name="baud" value="57600" />
+  </node>
   <rosparam param="ticks_meter">16400</rosparam>
 	
   <node pkg="differential_drive" type="diff_tf.py" name="diff_tf">
@@ -23,8 +27,8 @@
       <rosparam param="rate">30</rosparam>
       <rosparam param="timeout_ticks">4</rosparam>
       <rosparam param="rolling_pts">5</rosparam>
-	  <rosparam param="encoder_min">-100000</rosparam>
-	  <rosparam param="encoder_max">100000</rosparam>
+	  <rosparam param="encoder_min">-1000000</rosparam>
+	  <rosparam param="encoder_max">1000000</rosparam>
   </node>
   <node pkg="differential_drive" type="pid_velocity" name="rpid_velocity">
       <remap from="wheel" to="rwheel"/>
@@ -39,8 +43,8 @@
       <rosparam param="rate">1</rosparam>
       <rosparam param="timeout_ticks">4</rosparam>
       <rosparam param="rolling_pts">5</rosparam>
-	  <rosparam param="encoder_min">-100000</rosparam>
-	  <rosparam param="encoder_max">100000</rosparam>
+	  <rosparam param="encoder_min">-1000000</rosparam>
+	  <rosparam param="encoder_max">1000000</rosparam>
   </node>
 
   <!-- <node pkg="differential_drive" type="virtual_joystick.py" name="virtual_joystick" output="screen"/> -->
