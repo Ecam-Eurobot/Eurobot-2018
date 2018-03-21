@@ -48,11 +48,11 @@ rospy.Subscriber('motor/front/left', Float32, front_left_velocity_update)
 rospy.Subscriber('motor/front/right', Float32, front_right_velocity_update)
 rospy.Subscriber('motor/rear/left', Float32, rear_left_velocity_update)
 rospy.Subscriber('motor/rear/right', Float32, rear_right_velocity_update)
-rospy.Subscriber('initialpose/reset', Empty, reset)
+rospy.Subscriber('reset', Empty, reset)
 
 encoder_pub = rospy.Publisher('encoder', Encoders, queue_size=50)
 
-dt = 0.1
+dt = 0.02
 
 rate = rospy.Rate(1/dt)
 while not rospy.is_shutdown():
