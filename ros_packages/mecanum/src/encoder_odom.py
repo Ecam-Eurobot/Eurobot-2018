@@ -138,6 +138,9 @@ def compute_distance(new_ticks, old_ticks):
 
 def compute_velocity(new_ticks, old_ticks, new_time):
     global time
+    if time is None:
+        time = rospy.Time.now()
+
     return (compute_distance(new_ticks, old_ticks)) / (new_time - time).to_sec()
 
 
@@ -183,6 +186,8 @@ if __name__ == '__main__':
         odom_broadcaster = tf.TransformBroadcaster()
 
         set_initial_position(None)
+
+        time = rospy.Time.now()
 
         rospy.spin()
     except rospy.ROSInterruptException:

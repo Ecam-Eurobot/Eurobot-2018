@@ -8,7 +8,7 @@ import tf
 import actionlib
 
 from actionlib_msgs.msg import *
-from std_msgs.msg import Empty, Int16
+from std_msgs.msg import Empty, Int16, Int8
 from geometry_msgs.msg import Pose, Point, Quaternion, Twist, PoseWithCovarianceStamped
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 
@@ -30,7 +30,7 @@ class Cortex:
         self.actions = rospy.get_param("/actions")
 
         self.gun_pub = rospy.Publisher('gun_control', Int16, queue_size=10)
-        self.water_purification_pub = rospy.Publisher('water_purification', Int16, queue_size=10)
+        self.water_purification_pub = rospy.Publisher('water_purification', Int8, queue_size=10)
 
         rospy.loginfo("Cortex waiting for move_base action server...")
 
@@ -46,6 +46,7 @@ class Cortex:
         rospy.loginfo("Cortex running")
         rospy.loginfo(self.actions)
         for action in self.actions:
+            rospy.loginfo("Starting action: " + str(action))
             if action['type'] == "move":
                 x = action['position']['x']
                 y = action['position']['y']
