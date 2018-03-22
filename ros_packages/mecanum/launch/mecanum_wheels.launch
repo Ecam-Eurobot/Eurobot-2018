@@ -8,7 +8,8 @@
     <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
 
     <node name="mecanum" pkg="mecanum" type="mecanum.py" />
-    <node name="encoder_odom" pkg="mecanum" type="encoder_odom.py" output="screen" />
+    <node name="encoder_odom" pkg="mecanum" type="encoder_odom.py"  />
+    <node name="encoder_joints" pkg="mecanum" type="encoder_joint_state.py" />
 
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
 

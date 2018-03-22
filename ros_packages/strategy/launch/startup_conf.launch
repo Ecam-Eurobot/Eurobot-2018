@@ -1,4 +1,13 @@
 <launch>
+    <arg name="team" default="unknown"/>
+    <arg name="raspberry" default="true" />
+
     <rosparam command="load" file="$(find strategy)/param/pins.yaml" />
-    <node name="startup_conf" pkg="strategy" type="startup_conf.py" />
+    <rosparam command="load" file="$(find strategy)/param/initial.yaml" />
+
+    <param name="team" value="$(arg team)" />
+
+    <!-- Load the node with different args if the raspberry arg is set -->
+    <node if="$(arg raspberry)" name="startup_conf" pkg="strategy" type="startup_conf.py" args="-r" />
+    <node unless="$(arg raspberry)" name="startup_conf" pkg="strategy" type="startup_conf.py" />
 </launch>
