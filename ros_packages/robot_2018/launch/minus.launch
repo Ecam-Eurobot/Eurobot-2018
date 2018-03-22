@@ -9,7 +9,7 @@
     <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
 
     <include file="$(find navigation)/launch/move_base_minus.launch" />
-    <include file="$(find navigation)/launch/initialpose.launch" />
+    <include file="$(find navigation)/launch/initialpose_minus.launch" />
     <include if="$(arg raspberry)" file="$(find strategy)/launch/startup_conf.launch" />
 
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />

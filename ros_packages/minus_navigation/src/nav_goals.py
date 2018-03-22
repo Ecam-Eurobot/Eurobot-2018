@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
-import tf
+from tf.transformations import *
 import actionlib
 from actionlib_msgs.msg import *
 from std_msgs.msg import String
@@ -22,8 +22,7 @@ class MoveBaseTest:
                        'PREEMPTING', 'RECALLING', 'RECALLED', 'LOST']
 
         locations = dict()
-
-        locations['first'] = Pose(Point(1.50, -0.5, 0.0), Quaternion(*tf.transformations.quaternion_from_euler(0, 0, 0)))
+        locations['first'] = Pose(Point(2.50, -0.5, 0.0), Quaternion(quaternion_from_euler(0, 0, 3.14159)))
         #locations['second'] = Pose(Point(1.50, -1.5, 0.0), Quaternion(0.000, 0.000, 0.223, 0.975))
         #locations['third'] = Pose(Point(1.00, -1.5, 0.0), Quaternion(0.000, 0.000, 0.223, 0.975))
         #locations['fourth'] = Pose(Point(0.50, -0.5, 0.0), Quaternion(0.000, 0.000, 0.223, 0.975))
@@ -42,14 +41,7 @@ class MoveBaseTest:
         # the user in RViz
         initial_pose = PoseWithCovarianceStamped()
         initial_pose.header.frame_id = "map"
-        initial_pose.pose.pose.position.x = 1.0
-        initial_pose.pose.pose.position.y = -1.0
-        initial_pose.pose.pose.position.z = 0.0
-
-        initial_pose.pose.pose.orientation.x = 0.0
-        initial_pose.pose.pose.orientation.y = 0.0
-        initial_pose.pose.pose.orientation.z = 0.0
-        initial_pose.pose.pose.orientation.w = 0.0
+        initial_pose.pose = Pose(Point(1.00, -1.00, 0.0), Quaternion(quaternion_from_euler(0, 0, 3.14159)))
         # Variables to keep track of success rate, running time,
         # and distance traveled
         n_locations = len(locations)
@@ -63,8 +55,8 @@ class MoveBaseTest:
         last_location = ""
 
         # Get the initial pose from the user
-        #rospy.loginfo("*** Click the 2D Pose Estimate button in RViz to set the robot's initial pose...")
-        #rospy.wait_for_message('initialpose', PoseWithCovarianceStamped)
+        # rospy.loginfo("*** Click the 2D Pose Estimate button in RViz to set the robot's initial pose...")
+        # rospy.wait_for_message('initialpose', PoseWithCovarianceStamped)
         self.last_location = Pose()
         start = rospy.Publisher('start', String, queue_size=2)
         rospy.sleep(3)
