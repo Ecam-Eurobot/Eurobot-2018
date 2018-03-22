@@ -9,9 +9,8 @@
 #include <Servo.h>
 #include <AX12A.h>
 
-#define DirectionPin  (10u)
-#define BaudRate    (1000000ul)
-#define ID    (8u)
+//#define DirectionPin  (10u)
+//#define BaudRate    (1000000ul)
 
 //Functions
 int     csStartUpRoutine(void);
@@ -21,4 +20,4 @@ void     servoStart(void);
 void     ax12Start(int speed);
 void     ax12ComputePos(unsigned char id, byte position, int speed);
 void     ax12Blink(void);
-void     ax12Movedebug(unsigned char id, int position, int speed);
+void     ax12Move(unsigned char id, int position, int speed);

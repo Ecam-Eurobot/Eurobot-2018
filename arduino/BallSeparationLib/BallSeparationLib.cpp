@@ -14,13 +14,13 @@
 
 //Dynamixel AX-12A definitions
 #define DirectionPin  (10u)
-#define BaudRate    (1000000ul)
+#define BaudRate    (57600ul)
 #define ID1    (7u)
 #define ID2    (1u)
 
 const int clean_ball_position = 180;
 const int dirty_ball_position = 0;
-const int initial_pos_servo1 = 90;
+const int initial_pos_servo1 = 512;
 const int initial_pos_servo2 = 0;
 
 
@@ -132,8 +132,8 @@ void ax12Start(int speed)
 	ax12a.setEndless(ID1, OFF);
 	ax12a.setEndless(ID2, OFF);
 	//move into initial position
-	//ax12a.moveSpeed(ID1, initial_pos_servo1, speed);
-	//ax12a.moveSpeed(ID2, initial_pos_servo2, speed);
+	ax12a.moveSpeed(ID1, initial_pos_servo1, speed);
+	ax12a.moveSpeed(ID2, initial_pos_servo2, speed);
 }
 
 void ax12ComputePos(unsigned char id, byte position, int speed)
@@ -163,6 +163,6 @@ void ax12Blink(void)
 	delay(10000);
 }
 
-void ax12Movedebug(unsigned char id, int position, int speed){
+void ax12Move(unsigned char id, int position, int speed){
 	ax12a.moveSpeed(id, position, speed);
 }
