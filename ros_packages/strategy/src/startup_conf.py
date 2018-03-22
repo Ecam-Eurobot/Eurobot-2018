@@ -10,6 +10,9 @@ pi = pigpio.pi()
 
 rospy.init_node('startup_conf')
 
+# Robot
+robot = rospy.get_param("/robot")
+
 pub_start = rospy.Publisher('start', Empty, queue_size=1)
 pub_reset = rospy.Publisher('reset', Empty, queue_size=1)
 
@@ -19,7 +22,7 @@ pub_reset = rospy.Publisher('reset', Empty, queue_size=1)
 #
 
 
-
+µ
 # This pin will be used to configure the team
 pin_team = rospy.get_param("/pins/team_switch")
 
@@ -38,11 +41,11 @@ pin_start = rospy.get_param("/pins/start")
 def update_team(gpio, level, tick):
     if level:
         rospy.set_param("/team", "red")
-        print("set red")
+        rospy.set_param("/reset/position", rospy.get_param("/start/{}/red/position".format(robot)))
         pi.write(pin_team_feedback, 1)
     else :
         rospy.set_param("/team", "green")
-        print("set green")
+        rospy.set_param("/reset/position", rospy.get_param("/start/{}/green/position".format(robot)))
         # Blink 2 times for acknowledge
         pi.write(pin_team_feedback, 0)
     reset()
