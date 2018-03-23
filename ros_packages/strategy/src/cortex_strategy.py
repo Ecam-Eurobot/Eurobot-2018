@@ -46,6 +46,7 @@ class Cortex:
         rospy.loginfo("Cortex running")
         rospy.loginfo(self.actions)
         for action in self.actions:
+            rospy.loginfo("Starting action: " + str(action))
             if action['type'] == "move":
                 x = action['position']['x']
                 y = action['position']['y']
