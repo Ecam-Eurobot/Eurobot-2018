@@ -8,7 +8,7 @@ import tf
 import actionlib
 
 from actionlib_msgs.msg import *
-from std_msgs.msg import Empty
+from std_msgs.msg import Empty, Int16
 from geometry_msgs.msg import Pose, Point, Quaternion, Twist, PoseWithCovarianceStamped
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 
@@ -29,6 +29,9 @@ class Cortex:
 
         self.actions = rospy.get_param("/actions")
 
+        self.gun_pub = rospy.Publisher('gun_control', Int16, queue_size=10)
+        self.water_purification_pub = rospy.Publisher('water_purification', Int16, queue_size=10)
+
         rospy.loginfo("Cortex waiting for move_base action server...")
 
         # Wait 60 seconds for the action server to become available
@@ -48,6 +51,12 @@ class Cortex:
                 y = action['position']['y']
                 th = action['position']['orientation']
                 self.move_to(x, y, th)
+            elif action['type'] == "gun":
+                self.gun(action['value'])
+            elif action['type'] == "water_purification":
+                self.water_purification(action['value'])
+            elif action['type'] == "wait":
+                rospy.sleep(action['value'])
             else:
                 rospy.logerr("Action unknown: " + str(action))
 
@@ -78,6 +87,12 @@ class Cortex:
             else:
                 rospy.loginfo("Goal failed with error code: " + str(GOAL_STATES[state]))
                 return False
+
+    def gun(self, value):
+        self.gun_pub.publish(value)
+
+    def water_purification(self, value):
+        self.water_purification_pub.publish(value)
 
     def reset(self, _):
         self.reset_requested = True
