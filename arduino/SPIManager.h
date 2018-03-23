@@ -9,7 +9,7 @@ public:
     SPIManager(uint8_t slaveSelectPin);
     boolean initialize();
     float readData(byte thisRegister);
-    long readLongData(byte thisRegister);
+    long readLongData(byte thisRegister,byte msgSize, byte thisValue[]);
     void writeData(byte thisRegister, byte msgSize, byte thisValue[]);
     void end();
 protected:
