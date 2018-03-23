@@ -8,6 +8,8 @@
 
     <param name="team" value="$(arg team)" />
 
+    <node name="game" pkg="strategy" type="start_game.py"/>
+
     <!-- Load the node with different args if the raspberry arg is set -->
     <node if="$(arg raspberry)" name="startup_conf" pkg="strategy" type="startup_conf_minus.py" args="-r" />
     <node unless="$(arg raspberry)" name="startup_conf" pkg="strategy" type="startup_conf_minus.py" />
