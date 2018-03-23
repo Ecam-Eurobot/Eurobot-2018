@@ -1,0 +1,5 @@
+<launch>
+    <rosparam command="load" file="$(find strategy)/param/cortex_actions.yaml" />
+
+    <node name="cortex_strategy" pkg="strategy" type="cortex_strategy.py" output="screen" />
+</launch>

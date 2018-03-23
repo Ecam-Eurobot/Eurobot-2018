@@ -88,7 +88,6 @@ def velocities(encoder, new_time):
     ticks_rear_left = new_ticks_rear_left
     ticks_rear_right = new_ticks_rear_right
 
-    print(v_front_left, v_front_right, v_rear_left, v_rear_right)
     return v_front_left, v_front_right, v_rear_left, v_rear_right
 
 
@@ -158,8 +157,6 @@ def set_initial_position(empty):
             break
 
     time = rospy.Time.now()
-
-    print(position)
 
     x = position['x']
     y = position['y']
