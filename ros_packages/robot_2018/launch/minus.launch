@@ -13,9 +13,10 @@
     <include file="$(find navigation)/launch/move_base_minus.launch" />
 
     <!-- Strategy -->
-    <include file="$(find strategy)/launch/startup_conf_minus.launch">
+    <include file="$(find strategy)/launch/startup_conf.launch">
         <arg name="raspberry" value="$(arg raspberry)" />
         <arg name="team" value="$(arg team)" />
+        <arg name="robot" value="minus" />
     </include>
 
     <!-- Motion -->

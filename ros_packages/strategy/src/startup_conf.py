@@ -27,6 +27,9 @@ pin_team_feedback = rospy.get_param("/pins/team_feedback_led")
 # This pin will be used to reset the initial position with the current configuration
 pin_reset = rospy.get_param("/pins/reset_button")
 
+# Robot
+robot = rospy.get_param("/robot")
+
 if raspberry:
     GPIO.setmode(GPIO.BCM)
 
@@ -39,16 +42,16 @@ def update_team(pin):
     if raspberry:
         if GPIO.input(pin_team):
             rospy.set_param("/team", "green")
-            rospy.set_param("/reset/position", rospy.get_param("/start/green/position"))
+            rospy.set_param("/reset/position", rospy.get_param("/start/{}/green/position".format(robot)))
         else:
             rospy.set_param("/team", "red")
-            rospy.set_param("/reset/position", rospy.get_param("/start/red/position"))
+            rospy.set_param("/reset/position", rospy.get_param("/start/{}/red/position".format(robot)))
     else:
         team = rospy.get_param("/team")
         if team == "green":
-            rospy.set_param("/reset/position", rospy.get_param("/start/green/position"))
+            rospy.set_param("/reset/position", rospy.get_param("/start/{}/green/position".format(robot)))
         elif team == "red":
-            rospy.set_param("/reset/position", rospy.get_param("/start/red/position"))
+            rospy.set_param("/reset/position", rospy.get_param("/start/{}/red/position".format(robot)))
         else:
             rospy.set_param("/team", random.choice(["green", "red"]))
             update_team(pin_team)

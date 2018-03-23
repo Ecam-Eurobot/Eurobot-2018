@@ -19,6 +19,8 @@
         <arg name="team" value="$(arg team)" />
     </include>
 
+    <include file="$(find strategy)/launch/cortex_strategy.launch" />
+
     <!-- Motion -->
     <node name="mecanum" pkg="mecanum" type="mecanum.py" />
     <node name="encoder_odom" pkg="mecanum" type="encoder_odom.py" output="screen" />

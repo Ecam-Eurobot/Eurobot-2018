@@ -1,0 +1,6 @@
+actions:
+    -   type: "move"
+        position:
+            x: 2.90     # 3 - 16/2
+            y: -0.85     # -0.63 is the end of the starting area, the base width is 0.25 (-0.63 + 0.25/2)
+            orientation: 0
