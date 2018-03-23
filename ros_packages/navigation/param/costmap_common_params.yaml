@@ -17,8 +17,12 @@ obstacle_layer:
 inflation_layer:
     enabled:              true
     cost_scaling_factor:  5.0  # 10 - exponential rate at which the obstacle cost drops off
-    inflation_radius: 0.07 # max distance from an obstacle at which costs are incurred for planning paths.
+    inflation_radius: 0.10 # max distance from an obstacle at which costs are incurred for planning paths.
 
-#observation_sources: laser_scan_sensor point_cloud_sensor
-#laser_scan_sensor: {sensor_frame: frame_name, data_type: LaserScan, topic: topic_name, marking: true, clearing: true}
-#point_cloud_sensor: {sensor_frame: frame_name, data_type: PointCloud, topic: topic_name, marking: true, clearing: true}
+sonar:
+    clear_threshold:    0.15
+    mark_threshold:     0.75
+    no_readings_timeout: 2.0
+    topics: ["/ultrasound_front", "/ultrasound_rear", "/ultrasound_left", "/ultrasound_right"]
+
+
