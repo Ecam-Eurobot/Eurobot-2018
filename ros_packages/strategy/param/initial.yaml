@@ -13,7 +13,7 @@ start:
     minus:
         green:
             position:
-                x: 0.28
+                x: 0.35
                 y: -0.85
                 orientation: 0.0
         red:
