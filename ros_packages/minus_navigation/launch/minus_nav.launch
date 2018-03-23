@@ -1,0 +1,3 @@
+<launch>
+    <node name="minus_nav" pkg="minus_navigation" type="nav_goals.py" output="screen"/>
+</launch>

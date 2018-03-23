@@ -16,10 +16,19 @@ pub_mfr = None
 pub_mbl = None
 pub_mbr = None
 
+STOP = True
+
 def convert(move):
+    global STOP
+
     x = move.linear.x
     y = move.linear.y
     rot = move.angular.z
+
+    if x == 0 and y == 0 and rot == 0:
+        STOP = True
+    else:
+        STOP = False
 
     front_left = (x - y - rot * WHEEL_GEOMETRY) / WHEEL_RADIUS
     front_right = (x + y + rot * WHEEL_GEOMETRY) / WHEEL_RADIUS
@@ -49,6 +58,17 @@ if __name__ == '__main__':
         pub_mbr = rospy.Publisher('motor/rear/right', Float32, queue_size=1)
 
         sub = rospy.Subscriber('cmd_vel', Twist, convert)
-        rospy.spin()
+
+        rate = rospy.Rate(10)
+
+        while not rospy.is_shutdown():
+            if STOP:
+                pub_mfl.publish(0)
+                pub_mfr.publish(0)
+                pub_mbl.publish(0)
+                pub_mbr.publish(0)
+
+            rate.sleep()
+
     except rospy.ROSInterruptException:
         pass

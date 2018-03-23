@@ -6,8 +6,8 @@
     <xacro:property name="PI" value="3.1415926535897931" />
 
     <!-- Base -->
-    <xacro:property name="base_size_width" value="0.2" />
-    <xacro:property name="base_size_length" value="0.15" />
+    <xacro:property name="base_size_width" value="0.25" />
+    <xacro:property name="base_size_length" value="0.16" />
     <xacro:property name="base_size_height" value="0.06" />
     <xacro:property name="base_ground_offset" value="0.01" />
 

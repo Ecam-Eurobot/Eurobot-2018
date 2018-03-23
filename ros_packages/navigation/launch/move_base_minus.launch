@@ -6,14 +6,12 @@
     <!--<include file="$(find amcl)/examples/amcl_omni.launch" />-->
 
     <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
-        <rosparam file="$(find navigation)/param/move_base_params.yaml" command="load" />
-
-        <rosparam file="$(find navigation)/param/local_planner_params.yaml" command="load" />
-        <rosparam file="$(find navigation)/param/global_planner_params.yaml" command="load" />
-
+        <!-- Swap out the default planner for a planner with true holonomic motion -->
+        <param name="base_local_planner" value="base_local_planner/TrajectoryPlannerROS"/>
         <rosparam file="$(find navigation)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
         <rosparam file="$(find navigation)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />
         <rosparam file="$(find navigation)/param/local_costmap_params.yaml" command="load" />
         <rosparam file="$(find navigation)/param/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find navigation)/param/base_local_planner_params_minus.yaml" command="load" />
     </node>
 </launch>

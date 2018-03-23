@@ -1,0 +1,20 @@
+<package>
+  <description brief="differential_driver">
+
+     differential_driver
+
+  </description>
+  <author>ECAM-Eurobot</author>
+  <license>MIT</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/differential_driver</url>
+  <depend package="differential_drive"/>
+  <depend package="rosserial_arduino"/>
+  <depend package="rospy"/>
+  <depend package="roscpp"/>
+  <depend package="std_msgs"/>
+  <depend package="tf"/>
+  <depend package="robot_state_publisher"/>
+</package>
+
+

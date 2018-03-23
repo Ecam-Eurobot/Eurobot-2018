@@ -1,0 +1,11 @@
+wheel:
+    diameter: 0.08
+    separation:
+        horizontal: 0.256
+motor:
+    gains:
+        p: 15.0
+        i: 5.0
+        d: 0.0
+encoder:
+    ticks_per_rev: 4100

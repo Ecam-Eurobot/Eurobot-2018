@@ -88,7 +88,6 @@ def velocities(encoder, new_time):
     ticks_rear_left = new_ticks_rear_left
     ticks_rear_right = new_ticks_rear_right
 
-    print(v_front_left, v_front_right, v_rear_left, v_rear_right)
     return v_front_left, v_front_right, v_rear_left, v_rear_right
 
 
@@ -139,6 +138,9 @@ def compute_distance(new_ticks, old_ticks):
 
 def compute_velocity(new_ticks, old_ticks, new_time):
     global time
+    if time is None:
+        time = rospy.Time.now()
+
     return (compute_distance(new_ticks, old_ticks)) / (new_time - time).to_sec()
 
 
@@ -158,8 +160,6 @@ def set_initial_position(empty):
             break
 
     time = rospy.Time.now()
-
-    print(position)
 
     x = position['x']
     y = position['y']
@@ -186,6 +186,8 @@ if __name__ == '__main__':
         odom_broadcaster = tf.TransformBroadcaster()
 
         set_initial_position(None)
+
+        time = rospy.Time.now()
 
         rospy.spin()
     except rospy.ROSInterruptException:
