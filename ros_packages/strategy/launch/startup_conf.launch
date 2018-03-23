@@ -4,6 +4,7 @@
 
     <rosparam command="load" file="$(find strategy)/param/pins.yaml" />
     <rosparam command="load" file="$(find strategy)/param/initial.yaml" />
+    <rosparam command="load" file="$(find strategy)/param/game.yaml" />
 
     <param name="team" value="$(arg team)" />
 
