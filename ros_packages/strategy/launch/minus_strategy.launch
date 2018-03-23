@@ -1,0 +1,5 @@
+<launch>
+    <rosparam command="load" file="$(find strategy)/param/minus_actions.yaml" />
+
+    <node name="minus_strategy" pkg="strategy" type="minus_strategy.py" output="screen" />
+</launch>

@@ -13,6 +13,7 @@ def start(data):
     rospy.loginfo("Start of game")
     rospy.Timer(rospy.Duration(rospy.get_param("/game/duration")), end_of_game_cb, oneshot=True)
 
+
 def reset(data):
     rospy.loginfo("Reset of game")
     rospy.shutdown()

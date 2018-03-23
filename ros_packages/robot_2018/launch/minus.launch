@@ -21,9 +21,12 @@
         <arg name="robot" value="minus" />
     </include>
 
+    <include file="$(find strategy)/launch/minus_strategy.launch" />
+
     <!-- Motion -->
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
 
+    <!-- Differential driver lib implementation -->
     <include file="$(find differential_driver)/launch/minus.launch" />
 
     <!-- Visualization -->
