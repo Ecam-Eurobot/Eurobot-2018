@@ -21,6 +21,14 @@
     <xacro:property name="wheel_radius" value="0.03" />
     <xacro:property name="wheel_width" value="0.04" />
     <xacro:property name="wheel_mass" value="0.086" />
+    <xacro:property name="wheel_mass" value="0.086" />
+	
+	<!--ultrasound -->
+	<xacro:property name="ultrasound_size_front_rear" value = "0.02 0.04 0.01" />
+    <xacro:property name="ultrasound_size_right_left" value = "0.04 0.02 0.01" />
+
+
+
 
     <!-- Motors -->
     <!-- Polulu motor:  https://www.pololu.com/product/2824/specs -->
@@ -55,7 +63,8 @@
             <inertia ixx="${1/12 * mass * (3 * r**2 + z**2)}" ixy="0.0" ixz="0.0"
                      iyy="${1/12 * mass * (3 * r**2 + z**2)}" iyz="0.0"
                      izz="${1/2 * mass * r**2}" />
-        </inertial>
+        </inertial> 
+				
     </xacro:macro>
 
 
@@ -107,8 +116,25 @@
         <child link="top"/>
         <origin xyz="0 0 0"/>
     </joint>
+	 <!--
+	<link name="ultrasound_rear">
+    <visual>
+      <geometry>
+        <box size="0.04 0.02 0.01"/>
+      </geometry>
+      <origin rpy="1.57079632679 0 0" xyz="-0.070 0.08 0.03"/>
+      <material name="Green">
+        <color rgba="0 1 0 1"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="base_to_ultrasound_rear" type="fixed">
+    <parent link="base_link"/>
+    <child link="ultrasound_rear"/>
+    <origin xyz="0 0 0"/>
+  </joint>
 
-
+ -->
 
 
     <xacro:macro name="wheel" params="suffix offset_x offset_y">
@@ -134,10 +160,38 @@
             <limit effort ="${motor_max_torque}" velocity="${motor_max_velocity}"/>
         </joint>
     </xacro:macro>
+	
+	<xacro:macro name="ultrasound" params="suffix offset_x offset_y offset_z rot_x rot_y rot_z">
+        <link name="ultrasound_${suffix}">
+            <visual>
+                <geometry>
+                    <box size="0.02 0.04 0.01" />
+                </geometry>
+                <origin rpy="0 0 0" xyz="0 0 0" />
+                <material name="green">
+                    <color rgba="0 1 0 1"/>
+                </material>
+            </visual>
+        </link>
 
+        <joint name="base_link_to_ultrasound_${suffix}" type="fixed">
+            <parent link="base_link"/>
+            <child link="ultrasound_${suffix}"/>
+           <origin rpy="${rot_x} ${rot_y} ${rot_z}" xyz="${offset_x} ${offset_y} ${offset_z}"/>
+        </joint>
+    </xacro:macro>
+	
+	
     <xacro:wheel suffix="front_left" offset_x="${base_size_length/2 - wheel_radius}" offset_y="${-(base_size_width/2 - wheel_width/2)}"/>
     <xacro:wheel suffix="front_right" offset_x="${base_size_length/2 - wheel_radius}" offset_y="${base_size_width/2 - wheel_width/2}"/>
     <xacro:wheel suffix="rear_left" offset_x="${-(base_size_length/2 - wheel_radius)}" offset_y="${-(base_size_width/2 - wheel_width/2)}"/>
     <xacro:wheel suffix="rear_right" offset_x="${-(base_size_length/2 - wheel_radius)}" offset_y="${base_size_width/2 - wheel_width/2}"/>
+  	
+	<xacro:ultrasound suffix="front" offset_x="${base_size_length/2 - 0.02/2}" offset_y="0" offset_z="0.03" rot_x="0" rot_y="0" rot_z="0" />
+	<xacro:ultrasound suffix="rear" offset_x="${-(base_size_length/2 - 0.02/2)}" offset_y="0" offset_z="0.03" rot_x="0" rot_y="0" rot_z="${PI}" />
+	<xacro:ultrasound suffix="left" offset_x="0" offset_y="${base_size_width/2 - 0.02/2}" offset_z="0.03" rot_x="0" rot_y="0" rot_z="${PI/2}" />
+	<xacro:ultrasound suffix="right" offset_x="0" offset_y="${-(base_size_width/2 - 0.02/2)}" offset_z="0.03" rot_x="0" rot_y="0" rot_z="${-PI/2}" />
 
+
+	
 </robot>

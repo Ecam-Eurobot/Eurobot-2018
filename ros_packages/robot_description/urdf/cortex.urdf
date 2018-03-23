@@ -79,5 +79,6 @@
     <child link="wheel_rear_right"/>
     <origin xyz="0 0 0"/>
   </joint>
+
 </robot>
 
