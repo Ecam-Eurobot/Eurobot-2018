@@ -18,7 +18,7 @@ def start(data):
 
 def reset(data):
     rospy.loginfo("Reset of game")
-    rospy.shutdown()
+    rospy.signal_shutdown("Reset the game!")
 
 if __name__ == '__main__':
     try:
