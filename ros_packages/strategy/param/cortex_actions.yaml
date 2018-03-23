@@ -14,6 +14,12 @@ actions:
     -   type: "wait"
         value: 5
 
+    -   type: "water_purification"
+        value: 3
+
+    -   type: "gun"
+        value: 0
+
     -   type: "move"
         position:
             x: 2.60     # 3 - 16/2
