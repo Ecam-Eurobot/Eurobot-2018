@@ -27,7 +27,7 @@ class Minus:
         self.reset_requested = False
         self.goal = None
 
-        self.actions = rospy.get_param("/actions")
+        self.actions = rospy.get_param("/actions/{}".format(rospy.get_param('team')))
 
         rospy.loginfo("Minus waiting for move_base action server...")
 
