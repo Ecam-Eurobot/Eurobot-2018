@@ -1,4 +1,5 @@
 <launch>
+    <arg name="robot" default="cortex"/>
     <!-- Run the map server -->
     <include file="$(find navigation)/launch/map.launch" />
 
@@ -6,7 +7,8 @@
     <!--<include file="$(find amcl)/examples/amcl_omni.launch" />-->
 
     <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
-        <rosparam file="$(find navigation)/param/move_base_params.yaml" command="load" />
+        <rosparam if="$(eval robot == 'cortex')" file="$(find navigation)/param/move_base_params.yaml" command="load" />
+        <rosparam if="$(eval robot == 'minus')" file="$(find navigation)/param/move_base_params_minus.yaml" command="load" />
 
         <rosparam file="$(find navigation)/param/local_planner_params.yaml" command="load" />
         <rosparam file="$(find navigation)/param/global_planner_params.yaml" command="load" />

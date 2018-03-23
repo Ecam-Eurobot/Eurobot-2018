@@ -10,7 +10,9 @@
     <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
 
     <!-- Navigation -->
-    <include file="$(find navigation)/launch/move_base_minus.launch" />
+    <include file="$(find navigation)/launch/move_base.launch">
+        <arg name="robot" value="minus" />
+    </include>
 
     <!-- Strategy -->
     <include file="$(find strategy)/launch/startup_conf.launch">
