@@ -20,31 +20,35 @@ float SPIManager::readData(byte thisRegister) {
         unsigned char b[4];
     } u;
     digitalWrite(_slaveSelectPin, LOW);
+    delayMicroseconds(20);
     SPI.transfer(thisRegister);
     delayMicroseconds(20);
-    SPI.transfer(0x00);
+    SPI.transfer(0x04);
     for( int i = 0; i < 4; i = i + 1 ) {
         delayMicroseconds(20);
         u.b[i] = SPI.transfer(0x00);
     }
     digitalWrite(_slaveSelectPin, HIGH);
+    delayMicroseconds(2000);
     return (u.f);
 }
 
-long SPIManager::readLongData(byte thisRegister) {
+long SPIManager::readLongData(byte thisRegister,byte msgSize, byte thisValue[]) {
     union {
         unsigned long l;
         unsigned char b[4];
     } u;
     digitalWrite(_slaveSelectPin, LOW);
+    delayMicroseconds(20);
     SPI.transfer(thisRegister);
     delayMicroseconds(20);
-    SPI.transfer(0x00);
+    SPI.transfer(msgSize);
     for( int i = 0; i < 4; i = i + 1 ) {
         delayMicroseconds(20);
-        u.b[i] = SPI.transfer(0x00);
+        u.b[i] = SPI.transfer(thisValue[i]);
     }
     digitalWrite(_slaveSelectPin, HIGH);
+    delayMicroseconds(2000);
     return (u.l);
 }
 
@@ -53,6 +57,7 @@ long SPIManager::readLongData(byte thisRegister) {
 void SPIManager::writeData(byte thisRegister, byte msgSize, byte thisValue[]) {
     // take the chip select low to select the device:
     digitalWrite(_slaveSelectPin, LOW);
+    delayMicroseconds(20);
     SPI.transfer(thisRegister); //Send register location
     delayMicroseconds(20);
     SPI.transfer(msgSize); //Send size of msg
@@ -62,6 +67,7 @@ void SPIManager::writeData(byte thisRegister, byte msgSize, byte thisValue[]) {
     }
     // take the chip select high to de-select:
     digitalWrite(_slaveSelectPin, HIGH);
+    delayMicroseconds(2000);
 }
 
 /// cleanup

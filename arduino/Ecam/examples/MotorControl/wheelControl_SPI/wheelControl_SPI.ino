@@ -46,7 +46,6 @@ volatile long old_encoder = 0;
 void setup() {
     //init
     motor_speed.f = 6.00;
- 
     //Increase PWM SPEED
     TCCR0B = TCCR0B & B11111000 | B00000010;
     pinMode(PWM,OUTPUT); 

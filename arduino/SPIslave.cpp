@@ -15,6 +15,7 @@ void SpiSlave::begin(){
 
 void SpiSlave::reset() {
         dataCount = 0;
+       endTrans = false;
 }
 
 
