@@ -184,6 +184,8 @@ if __name__ == '__main__':
 
         set_initial_position(None)
 
+        time = rospy.Time.now()
+
         rospy.spin()
     except rospy.ROSInterruptException:
         pass
