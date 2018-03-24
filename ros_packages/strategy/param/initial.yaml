@@ -13,8 +13,8 @@ start:
     minus:
         green:
             position:
-                x: 0.35
-                y: -0.85
+                x: 0.35 # Mettre les vrais positions de depart
+                y: -0.85 # Mettre les vrais positions de depart
                 orientation: 0.0
         red:
             position:

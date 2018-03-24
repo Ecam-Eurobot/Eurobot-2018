@@ -26,6 +26,11 @@
     <!-- Motion -->
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
 
+    <!-- Motion -->
+    <node name="robot_obstacle" pkg="sensors" type="ultrasound_stop_minus">
+        <arg name="robot" value="minus" />
+    </node>
+
     <!-- Differential driver lib implementation -->
     <include file="$(find differential_driver)/launch/minus.launch" />
 

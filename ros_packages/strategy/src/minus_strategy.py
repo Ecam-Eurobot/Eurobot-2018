@@ -43,17 +43,19 @@ class Minus:
         rospy.loginfo("Minus running")
         rospy.loginfo(self.actions)
         for action in self.actions:
-            if action['type'] == "move":
-                x = action['position']['x']
-                y = action['position']['y']
-                th = action['position']['orientation']
-                self.move_to(x, y, th)
-            else:
-                rospy.logerr("Action unknown: " + str(action))
+            action_done = False
+            while not action_done:
+                if action['type'] == "move":
+                    x = action['position']['x']
+                    y = action['position']['y']
+                    th = action['position']['orientation']
+                    action_done = self.move_to(x, y, th)
+                else:
+                    rospy.logerr("Action unknown: " + str(action))
 
-            if self.reset_requested:
-                self.reset_requested = False
-                return
+                if self.reset_requested:
+                    self.reset_requested = False
+                    return
 
     def move_to(self, x, y, orientation, timeout=30):
         pose = Pose(Point(x, y, 0.), Quaternion(*tf.transformations.quaternion_from_euler(0, 0, orientation)))

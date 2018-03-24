@@ -9,7 +9,7 @@
   <rosparam param="ticks_meter">16400</rosparam>
 	
   <node pkg="differential_drive" type="diff_tf.py" name="diff_tf">
-  	  <rosparam param="base_width">0.359</rosparam>
+  	  <rosparam param="base_width">0.353</rosparam>
 	  <rosparam param="encoder_min">-1000000</rosparam>
 	  <rosparam param="encoder_max">1000000</rosparam>
   </node>
@@ -49,7 +49,7 @@
   <!-- <node pkg="differential_drive" type="virtual_joystick.py" name="virtual_joystick" output="screen"/> -->
   <node pkg="differential_drive" type="twist_to_motors.py" name="twist_to_motors" output="screen">
 	<remap from="twist" to="cmd_vel"/>
-    <rosparam param="base_width">0.359</rosparam>
+    <rosparam param="base_width">0.353</rosparam>
     <rosparam param="rate">20</rosparam>
   </node>
 

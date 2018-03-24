@@ -5,7 +5,6 @@ from std_msgs.msg import Bool
 from sensor_msgs.msg import Range
 
 
-
 def sensor_data(range):
     pass
 
