@@ -8,4 +8,4 @@ export ROS_IP=$(hostname -I)
 export ROS_MASTER_URI=http://$(hostname):11311
 
 # Launch ROS
-roslaunch robot_2018 cortex.launch
+roslaunch robot_2018 cortex.launch raspberry:=true
