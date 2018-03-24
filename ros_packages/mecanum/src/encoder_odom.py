@@ -150,7 +150,7 @@ def set_initial_position(empty):
     position = None
 
     # Wait for parameter to become available
-    while True:
+    while not rospy.is_shutdown():
         try:
             position = rospy.get_param("/reset/position")
         except KeyError:
