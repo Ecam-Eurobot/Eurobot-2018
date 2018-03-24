@@ -7,13 +7,20 @@ from std_msgs.msg import Empty
 
 raspberry = "-r" in sys.argv
 
+pi = None
 # If passed the -r argument, load the rapsberry libs
 if raspberry:
-    import RPi.GPIO as GPIO
+    import pigpio
+    pi = pigpio.pi()
 
 rospy.init_node('startup_conf')
 
-reset_pub = rospy.Publisher('reset', Empty, queue_size=1)
+# Robot
+robot = rospy.get_param("/robot")
+
+pub_start = rospy.Publisher('start', Empty, queue_size=1)
+pub_reset = rospy.Publisher('reset', Empty, queue_size=1)
+
 
 #
 #   GPIO PIN CONFIGURATIONS
@@ -24,54 +31,73 @@ pin_team = rospy.get_param("/pins/team_switch")
 # This pin will be used to drive a led to indicate that the team has been set correctly in ROS
 pin_team_feedback = rospy.get_param("/pins/team_feedback_led")
 
-# This pin will be used to reset the initial position with the current configuration
-pin_reset = rospy.get_param("/pins/reset_button")
+# This pin will be used to drive a led to indicate that the strategy has been set correctly in ROS
+pin_strategy_feedback = rospy.get_param("/pins/strategy_feedback_led")
 
-# Robot
-robot = rospy.get_param("/robot")
-
-if raspberry:
-    GPIO.setmode(GPIO.BCM)
-
-    GPIO.setup(pin_team, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.setup(pin_team_feedback, GPIO.OUT)
-    GPIO.setup(pin_reset, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+# This pin will be used to launch robot
+pin_start = rospy.get_param("/pins/start")
 
 
-def update_team(pin):
+def update_team(gpio, level, tick):
     if raspberry:
-        if GPIO.input(pin_team):
-            rospy.set_param("/team", "green")
-            rospy.set_param("/reset/position", rospy.get_param("/start/{}/green/position".format(robot)))
-        else:
+        if level:
             rospy.set_param("/team", "red")
             rospy.set_param("/reset/position", rospy.get_param("/start/{}/red/position".format(robot)))
+            pi.write(pin_team_feedback, 1)
+        else :
+            rospy.set_param("/team", "green")
+            rospy.set_param("/reset/position", rospy.get_param("/start/{}/green/position".format(robot)))
+            # Blink 2 times for acknowledge
+            pi.write(pin_team_feedback, 0)
     else:
-        team = rospy.get_param("/team")
+        team = rospy.get_param("/team", random.choice(["green", "red"]))
+        rospy.logwarn("Setting team automatically to: " + team)
         if team == "green":
             rospy.set_param("/reset/position", rospy.get_param("/start/{}/green/position".format(robot)))
         elif team == "red":
             rospy.set_param("/reset/position", rospy.get_param("/start/{}/red/position".format(robot)))
-        else:
-            rospy.set_param("/team", random.choice(["green", "red"]))
-            update_team(pin_team)
 
-    # Call reset to reset the coordinates on toggle switch change
-    reset(pin)
-
-def reset(pin):
-    reset_pub.publish(Empty())
+    reset()
 
 
-if raspberry:
-    GPIO.add_event_detect(pin_team, GPIO.BOTH, callback=update_team)
-    GPIO.add_event_detect(pin_reset, GPIO.RISING, callback=reset)
+publish = True
 
-# Update team on startup
-update_team(pin_team)
 
+def start(gpio, level, tick):
+    global publish
+    rospy.sleep(0.2)
+    if raspberry and not pi.read(pin_start):
+        if publish :
+            pi.write(pin_strategy_feedback, 1)
+            pub_start.publish(Empty())
+            publish = False
+
+
+def reset():
+    pub_reset.publish(Empty())
+    if raspberry:
+        if pi.read(pin_start):
+            global publish
+            publish = True
+            pi.write(pin_strategy_feedback, 0)
+
+com = False
+init = True
+
+if raspberry and init:
+    pi.set_mode(pin_team, pigpio.INPUT)
+    pi.set_mode(pin_start, pigpio.INPUT)
+    pi.set_mode(pin_team_feedback, pigpio.OUTPUT)
+    pi.set_mode(pin_strategy_feedback, pigpio.OUTPUT)
+    pi.set_pull_up_down(pin_start, pigpio.PUD_DOWN)
+    pi.set_pull_up_down(pin_strategy_feedback, pigpio.PUD_DOWN)
+    teamInterrupt = pi.callback(pin_team, pigpio.EITHER_EDGE, update_team)
+    startInterrupt = pi.callback(pin_start, pigpio.EITHER_EDGE, start)
+
+    update_team(None, pi.read(pin_team), None)
+else:
+    rospy.sleep(1)
+    update_team(None, None, None)
 
 while not rospy.is_shutdown():
     pass
-
-
