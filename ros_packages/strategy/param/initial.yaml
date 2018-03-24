@@ -1,11 +1,23 @@
 start:
-    green:
-        position:
-            x: 0.2
-            y: -0.2
-            orientation: 0
-    red:
-        position:
-            x: 2.90     # 3 - 16/2
-            y: -0.50     # -0.63 is the end of the starting area, the base width is 0.25 (-0.63 + 0.25/2)
-            orientation: 0
+    cortex:
+        green:
+            position:
+                x: 0.1
+                y: -0.50
+                orientation: 0
+        red:
+            position:
+                x: 2.90     # 3 - 16/2
+                y: -0.50     # -0.63 is the end of the starting area, the base width is 0.25 (-0.63 + 0.25/2)
+                orientation: 0
+    minus:
+        green:
+            position:
+                x: 0.35
+                y: -0.85
+                orientation: 0.0
+        red:
+            position:
+                x: 2.3
+                y: -0.9
+                orientation: 3.14159

@@ -11,4 +11,17 @@ EBandPlannerROS:
     max_translational_acceleration: 0.3
     max_rotational_acceleration: 1.0
     differential_drive: false
+
+TrajectoryPlannerROS:
+    acc_lim_x: 0.15
+    acc_lim_y: 0.15
+    acc_lim_theta: 0.5
+    max_vel_x: 0.25
+    min_vel_x: 0.01
+    controller_frequency: 10
+    xy_goal_tolerance: 0.02
+    latch_xy_goal_tolerance: true
+
+    heading_lookahead: 0.5
+    holonomic_robot: false #not sure to test
     

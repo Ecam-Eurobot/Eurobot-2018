@@ -25,7 +25,6 @@ pub_reset = rospy.Publisher('reset', Empty, queue_size=1)
 #
 #   GPIO PIN CONFIGURATIONS
 #
-
 # This pin will be used to configure the team
 pin_team = rospy.get_param("/pins/team_switch")
 
