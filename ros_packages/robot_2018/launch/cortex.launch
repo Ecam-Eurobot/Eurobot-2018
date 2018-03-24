@@ -4,7 +4,7 @@
     <arg name="raspberry" default="false" />
     <arg name="viz" default="false" />
     <arg name="model" default="$(find robot_description)/urdf/cortex.xacro"/>
-    <arg name="rvizconfig" default="$(find mecanum)/rviz/robot.rviz" />
+    <arg name="rvizconfig" default="$(find robot_2018)/rviz/robot.rviz" />
 
     <!-- Robot description -->
     <rosparam command="load" file="$(find robot_2018)/param/mecanum.yaml" />
@@ -25,6 +25,9 @@
     <node name="mecanum" pkg="mecanum" type="mecanum.py" />
     <node name="encoder_odom" pkg="mecanum" type="encoder_odom.py" output="screen" />
     <node name="encoder_joint_state" pkg="mecanum" type="encoder_joint_state.py" />
+
+    <!-- Sensors -->
+    <node name="ultrasound_stop" pkg="sensors" type="ultrasound_stop.py" />
 
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
 

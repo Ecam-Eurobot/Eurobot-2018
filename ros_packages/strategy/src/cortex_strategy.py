@@ -8,7 +8,7 @@ import tf
 import actionlib
 
 from actionlib_msgs.msg import *
-from std_msgs.msg import Empty, Int16, Int8
+from std_msgs.msg import Empty, Int16, Int8, Bool
 from geometry_msgs.msg import Pose, Point, Quaternion, Twist, PoseWithCovarianceStamped
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 
@@ -25,6 +25,8 @@ class Cortex:
         self.move_base = actionlib.SimpleActionClient("move_base", MoveBaseAction)
 
         self.reset_requested = False
+        self.paused = False
+        self.current_action = None
         self.goal = None
 
         self.actions = rospy.get_param("/actions")
@@ -46,20 +48,29 @@ class Cortex:
         rospy.loginfo("Cortex running")
         rospy.loginfo(self.actions)
         for action in self.actions:
-            rospy.loginfo("Starting action: " + str(action))
-            if action['type'] == "move":
-                x = action['position']['x']
-                y = action['position']['y']
-                th = action['position']['orientation']
-                self.move_to(x, y, th)
-            elif action['type'] == "gun":
-                self.gun(action['value'])
-            elif action['type'] == "water_purification":
-                self.water_purification(action['value'])
-            elif action['type'] == "wait":
-                rospy.sleep(action['value'])
-            else:
-                rospy.logerr("Action unknown: " + str(action))
+            action_done = False
+            while not action_done:
+                if self.paused:
+                    rospy.sleep(0.1)
+                    continue
+
+                rospy.loginfo("Starting action: " + str(action))
+                if action['type'] == "move":
+                    x = action['position']['x']
+                    y = action['position']['y']
+                    th = action['position']['orientation']
+                    action_done = self.move_to(x, y, th)
+                elif action['type'] == "gun":
+                    self.gun(action['value'])
+                    action_done = True
+                elif action['type'] == "water_purification":
+                    self.water_purification(action['value'])
+                elif action['type'] == "wait":
+                    rospy.sleep(action['value'])
+                    action_done = True
+                else:
+                    rospy.logerr("Action unknown: " + str(action))
+                    action_done = True
 
             if self.reset_requested:
                 self.reset_requested = False
@@ -99,6 +110,16 @@ class Cortex:
         self.reset_requested = True
         self.move_base.cancel_goal()
 
+    def pause(self, value):
+        self.paused = value.data
+        rospy.loginfo(self.paused)
+        if self.paused:
+            rospy.logwarn("Paused action")
+            self.move_base.cancel_goal()
+        else:
+            rospy.logwarn("Restarted action")
+
+
     def shutdown(self):
         rospy.loginfo("Stopping the robot...")
         self.move_base.cancel_goal()
@@ -111,6 +132,7 @@ if __name__ == '__main__':
 
         start_sub = rospy.Subscriber('start', Empty, cortex.run)
         reset_sub = rospy.Subscriber('reset', Empty, cortex.reset)
+        reset_sub = rospy.Subscriber('obstacle/stop', Bool, cortex.pause)
 
         rospy.spin()
 
