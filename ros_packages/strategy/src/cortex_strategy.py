@@ -65,6 +65,7 @@ class Cortex:
                     action_done = True
                 elif action['type'] == "water_purification":
                     self.water_purification(action['value'])
+                    action_done = True
                 elif action['type'] == "wait":
                     rospy.sleep(action['value'])
                     action_done = True
