@@ -11,7 +11,7 @@ MAX_DISTANCE = 0.2
 position = None
 initial = None
 # Robot
-robot = rospy.get_param("/robot")
+robot = rospy.get_param("/team")
 if robot == "green":
     initial = {"x": 0.4, "y": -0.65}
 else:
@@ -34,7 +34,8 @@ def sensor_data(sensor):
 
 def save_pos(fb):
     global position
-    position = fb.base_position.pose.position
+    rospy.loginfo(fb)
+    #position = fb.base_position.pose.position
 
 if __name__ == '__main__':
     try:

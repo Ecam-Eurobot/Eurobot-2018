@@ -50,8 +50,9 @@ def update_team(gpio, level, tick):
             # Blink 2 times for acknowledge
             pi.write(pin_team_feedback, 0)
     else:
-        team = rospy.get_param("/team", random.choice(["green", "red"]))
-        rospy.logwarn("Setting team automatically to: " + team)
+        choice = random.choice(["green", "red"])
+        team = rospy.set_param("/team", choice)
+        rospy.logwarn("Setting team automatically to: " + choice)
         if team == "green":
             rospy.set_param("/reset/position", rospy.get_param("/start/{}/green/position".format(robot)))
         elif team == "red":

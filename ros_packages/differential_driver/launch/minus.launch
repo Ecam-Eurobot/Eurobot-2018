@@ -1,9 +1,9 @@
 <launch>
   <!-- change this next line to include the launch file for your robot's hardware drivers: -->
-  <node pkg="rosserial_python" type="serial_node.py" args="/dev/ttyACM0" name="serial_node0" respawn="true">
+  <node pkg="rosserial_python" type="serial_node.py" args="/dev/ttyACM0" name="serial_node0" respawn="false">
     <param name="baud" value="57600" />
   </node>
-  <node pkg="rosserial_python" type="serial_node.py" args="/dev/ttyACM1" name="serial_node1" respawn="true">
+  <node pkg="rosserial_python" type="serial_node.py" args="/dev/ttyACM1" name="serial_node1" respawn="false">
     <param name="baud" value="57600" />
   </node>
   <rosparam param="ticks_meter">16400</rosparam>
