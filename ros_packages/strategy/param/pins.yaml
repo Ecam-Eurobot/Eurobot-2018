@@ -1,8 +1,8 @@
 pins:
-    team_switch: 23
-    team_feedback_led: 21
+    team_switch: 23                 # pin 16
+    team_feedback_led: 21           # pin 40
     strategy_switch: 0
-    strategy_feedback_led: 20
+    strategy_feedback_led: 20       # pin 38
     initialization_switch: 0
     initialization_feedback_led: 0
-    start: 12
+    start: 12                       # pin 32

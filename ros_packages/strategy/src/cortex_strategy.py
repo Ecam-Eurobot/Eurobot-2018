@@ -32,7 +32,7 @@ class Cortex:
         self.actions = rospy.get_param("/actions")
 
         self.gun_pub = rospy.Publisher('gun_control', Int16, queue_size=10)
-        self.water_purification_pub = rospy.Publisher('water_purification', Int8, queue_size=10)
+        self.water_purification_pub = rospy.Publisher('water_purification', Int16, queue_size=10)
 
         rospy.loginfo("Cortex waiting for move_base action server...")
 

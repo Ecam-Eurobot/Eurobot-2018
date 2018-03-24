@@ -4,7 +4,7 @@ import rospy
 from ecam_msg.msg import Encoders
 
 def correct(encoders):
-    encoders.front_right = -encoders.front_right
+    #encoders.front_right = -encoders.front_right
     encoders.rear_right = -encoders.rear_right
 
     encoder_pub.publish(encoders)
