@@ -109,5 +109,25 @@
 
     <xacro:wheel suffix="left" offset_x="${base_size_length/2 - wheel_radius}" offset_y="${-(base_size_width/2 - wheel_width/2)}"/>
     <xacro:wheel suffix="right" offset_x="${base_size_length/2 - wheel_radius}" offset_y="${base_size_width/2 - wheel_width/2}"/>
+    <xacro:macro name="ultrasound" params="suffix offset_x offset_y offset_z rot_x rot_y rot_z">
+        <link name="ultrasound_${suffix}">
+            <visual>
+                <geometry>
+                    <box size="0.02 0.04 0.01" />
+                </geometry>
+                <origin rpy="0 0 0" xyz="0 0 0" />
+                <material name="green">
+                    <color rgba="0 1 0 1"/>
+                </material>
+            </visual>
+        </link>
 
+        <joint name="base_link_to_ultrasound_${suffix}" type="fixed">
+            <parent link="base_link"/>
+            <child link="ultrasound_${suffix}"/>
+           <origin rpy="${rot_x} ${rot_y} ${rot_z}" xyz="${offset_x} ${offset_y} ${offset_z}"/>
+        </joint>
+    </xacro:macro>
+    <xacro:ultrasound suffix="front" offset_x="${base_size_length/2 - 0.02/2}" offset_y="0" offset_z="0.03" rot_x="0" rot_y="0" rot_z="0" />
+    <xacro:ultrasound suffix="rear" offset_x="${-(base_size_length/2 - 0.02/2)}" offset_y="0" offset_z="0.03" rot_x="0" rot_y="0" rot_z="${PI}" />
 </robot>
