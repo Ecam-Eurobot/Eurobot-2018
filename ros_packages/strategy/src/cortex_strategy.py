@@ -92,7 +92,9 @@ class Cortex:
 
         self.move_base.send_goal(self.goal)
 
+        rospy.loginfo("Waiting for move_base to finish")
         finished_within_time = self.move_base.wait_for_result(rospy.Duration(timeout))
+        rospy.loginfo("move_base finished!")
 
         if not finished_within_time:
             self.move_base.cancel_goal()
