@@ -80,6 +80,7 @@ class Cortex:
 
             if self.reset_requested:
                 self.reset_requested = False
+                rospy.loginfo("Exiting action loop, reset requested")
                 return
 
     def move_to(self, x, y, orientation, timeout=30):
