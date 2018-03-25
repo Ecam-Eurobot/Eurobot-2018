@@ -76,10 +76,10 @@ def start(gpio, level, tick):
 
 
 def reset():
-    pub_reset.publish(Empty())
     if raspberry:
         if pi.read(pin_start):
             global publish
+            pub_reset.publish(Empty())
             publish = True
             pi.write(pin_strategy_feedback, 0)
 
