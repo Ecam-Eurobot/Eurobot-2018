@@ -7,6 +7,7 @@ from move_base_msgs.msg import MoveBaseActionFeedback
 
 obstacle = False
 MAX_DISTANCE = 0.2
+encoder_pub = None
 
 position = None
 initial = None
@@ -19,7 +20,7 @@ else:
 
 
 def sensor_data(sensor):
-    global obstacle, initial, position
+    global obstacle, initial, position, encoder_pub
     if not obstacle and sensor.range <= MAX_DISTANCE and sensor.range != 0:
         if robot == "green" and position.x > initial['x'] and position.y < initial['y']:
             obstacle = True
@@ -40,7 +41,8 @@ if __name__ == '__main__':
     try:
         rospy.init_node('sonar_stop')
 
-        rospy.Subscriber('ultrasound_front', Range, sensor_data)
+        rospy.Subscriber('ultrasound_front_left', Range, sensor_data)
+        rospy.Subscriber('ultrasound_front_right', Range, sensor_data)
         rospy.Subscriber('ultrasound_rear', Range, sensor_data)
         rospy.Subscriber('move_base/feedback', MoveBaseActionFeedback, save_pos)
         encoder_pub = rospy.Publisher('obstacle/stop', Bool, queue_size=50)

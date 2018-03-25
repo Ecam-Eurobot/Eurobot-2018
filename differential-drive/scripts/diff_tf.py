@@ -111,7 +111,8 @@ class DiffTf:
         self.reset()
         self.odomPub = rospy.Publisher("odom", Odometry, queue_size=10)
         self.odomBroadcaster = TransformBroadcaster()
-        
+
+
     #############################################################################
     def spin(self):
     #############################################################################
