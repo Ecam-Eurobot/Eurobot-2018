@@ -29,7 +29,7 @@ class Cortex:
         self.current_action = None
         self.goal = None
 
-        self.actions = rospy.get_param("/actions")
+        self.actions = rospy.get_param("/actions/{}".format(rospy.get_param('team')))
 
         self.gun_pub = rospy.Publisher('gun_control', Int16, queue_size=10)
         self.water_purification_pub = rospy.Publisher('water_purification', Int16, queue_size=10)
