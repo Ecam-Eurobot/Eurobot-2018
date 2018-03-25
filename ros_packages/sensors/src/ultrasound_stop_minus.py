@@ -36,7 +36,7 @@ def sensor_data(sensor):
 def save_pos(fb):
     global position
     rospy.loginfo(fb)
-    #position = fb.base_position.pose.position
+    position = fb.base_position.pose.position
 
 if __name__ == '__main__':
     try:
