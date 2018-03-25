@@ -47,6 +47,7 @@ class Cortex:
     def run(self, _):
         rospy.loginfo("Cortex running")
         rospy.loginfo(self.actions)
+        rospy.logwarn("START")
         for action in self.actions:
             action_done = False
             while not action_done:
@@ -59,7 +60,10 @@ class Cortex:
                     x = action['position']['x']
                     y = action['position']['y']
                     th = action['position']['orientation']
-                    action_done = self.move_to(x, y, th)
+                    if 'timeout' in action:
+                        action_done = self.move_to(x, y, th, timeout=action['timeout'])
+                    else:
+                        action_done = self.move_to(x, y, th)
                 elif action['type'] == "gun":
                     self.gun(action['value'])
                     action_done = True
@@ -111,6 +115,7 @@ class Cortex:
         self.reset_requested = True
         self.actions = rospy.get_param("/actions/{}".format(rospy.get_param('team')))
         self.move_base.cancel_goal()
+        rospy.logwarn("RESET")
 
     def pause(self, value):
         self.paused = value.data
