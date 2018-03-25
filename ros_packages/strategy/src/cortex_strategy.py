@@ -25,6 +25,7 @@ class Cortex:
         self.move_base = actionlib.SimpleActionClient("move_base", MoveBaseAction)
 
         self.reset_requested = False
+        self.started = False
         self.paused = False
         self.current_action = None
         self.goal = None
@@ -48,6 +49,9 @@ class Cortex:
         rospy.loginfo("Cortex running")
         rospy.loginfo(self.actions)
         rospy.logwarn("START")
+
+        self.started = True
+
         for action in self.actions:
             action_done = False
             while not action_done:
@@ -118,7 +122,10 @@ class Cortex:
         self.water_purification_pub.publish(value)
 
     def reset(self, _):
-        self.reset_requested = True
+        if self.started:
+            self.reset_requested = True
+
+        self.started = False
         self.actions = rospy.get_param("/actions/{}".format(rospy.get_param('team')))
         self.move_base.cancel_goal()
         rospy.logwarn("RESET")
