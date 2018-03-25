@@ -97,6 +97,7 @@ class Cortex:
         if not finished_within_time:
             self.move_base.cancel_goal()
             rospy.loginfo("Timed out achieving goal")
+            return True
         else:
             state = self.move_base.get_state()
             if state == GoalStatus.SUCCEEDED:
