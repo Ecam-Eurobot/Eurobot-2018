@@ -16,13 +16,17 @@ def sensor_data(reading):
         obstacle_pub.publish(False)
         obstacle = False
 
+def sensor_data_front_ignore(reading):
+    # Completely ignore, it is too close to the border
+    pass
+
 if __name__ == '__main__':
     try:
         rospy.init_node('sonar_stop')
 
-        #rospy.Subscriber('ultrasound_front', Range, sensor_data)
-        #rospy.Subscriber('ultrasound_rear', Range, sensor_data)
-        #rospy.Subscriber('ultrasound_left', Range, sensor_data)
+        rospy.Subscriber('ultrasound_front', Range, sensor_data_front_ignore)
+        rospy.Subscriber('ultrasound_rear', Range, sensor_data)
+        rospy.Subscriber('ultrasound_left', Range, sensor_data)
         rospy.Subscriber('ultrasound_right', Range, sensor_data)
 
         obstacle_pub = rospy.Publisher('obstacle/stop', Bool, queue_size=50)
