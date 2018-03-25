@@ -64,6 +64,7 @@ class Cortex:
                         action_done = self.move_to(x, y, th, timeout=action['timeout'])
                     else:
                         action_done = self.move_to(x, y, th)
+                    rospy.loginfo(action_done)
                 elif action['type'] == "gun":
                     self.gun(action['value'])
                     action_done = True
@@ -103,6 +104,7 @@ class Cortex:
         else:
             state = self.move_base.get_state()
             if state == GoalStatus.SUCCEEDED:
+                rospy.loginfo("Goal succeeded !")
                 return True
             else:
                 rospy.loginfo("Goal failed with error code: " + str(GOAL_STATES[state]))
