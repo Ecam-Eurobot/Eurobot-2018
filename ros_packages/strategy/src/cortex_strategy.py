@@ -85,7 +85,10 @@ class Cortex:
             if self.reset_requested:
                 self.reset_requested = False
                 rospy.loginfo("Exiting action loop, reset requested")
+                self.started = False
                 return
+
+        self.started = False
 
     def move_to(self, x, y, orientation, timeout=30):
         pose = Pose(Point(x, y, 0.), Quaternion(*tf.transformations.quaternion_from_euler(0, 0, orientation)))
@@ -125,7 +128,6 @@ class Cortex:
         if self.started:
             self.reset_requested = True
 
-        self.started = False
         self.actions = rospy.get_param("/actions/{}".format(rospy.get_param('team')))
         self.move_base.cancel_goal()
         rospy.logwarn("RESET")
