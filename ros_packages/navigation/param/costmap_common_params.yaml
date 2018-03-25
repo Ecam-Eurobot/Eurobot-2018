@@ -21,7 +21,7 @@ inflation_layer:
 
 sonar_layer:
     enabled: true
-    topics: ["/ultrasound_front", "/ultrasound_rear", "/ultrasound_right", "/ultrasound_left"]
+    topics: ["/ultrasound_front", "/ultrasound_rear"]
     ns: ""
     no_readings_timeout: 1.0
     clear_threshold: 0.2

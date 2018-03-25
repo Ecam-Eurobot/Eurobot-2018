@@ -23,6 +23,7 @@ class Minus:
         rospy.on_shutdown(self.shutdown)
 
         self.move_base = actionlib.SimpleActionClient("move_base", MoveBaseAction)
+        self.stop_pub = rospy.Publisher('stop', Empty, queue_size=10)
 
         self.reset_requested = False
         self.goal = None
@@ -41,7 +42,6 @@ class Minus:
 
     def run(self, _):
         rospy.loginfo("Minus running")
-        rospy.loginfo(self.actions)
         for action in self.actions:
             action_done = False
             while not action_done:
@@ -89,7 +89,7 @@ class Minus:
         rospy.loginfo("Stopping the robot...")
         self.move_base.cancel_goal()
         rospy.sleep(0.2)
-        stop_pub.publish(Empty())
+        self.stop_pub.publish(Empty())
 
 
 if __name__ == '__main__':
@@ -98,7 +98,6 @@ if __name__ == '__main__':
 
         start_sub = rospy.Subscriber('start', Empty, minus.run)
         reset_sub = rospy.Subscriber('reset', Empty, minus.reset)
-        stop_pub = rospy.Publisher('stop', Empty, queue_size=10)
 
         rospy.spin()
 

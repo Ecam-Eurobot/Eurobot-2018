@@ -6,10 +6,13 @@
   <node pkg="rosserial_python" type="serial_node.py" args="/dev/ttyACM1" name="serial_node1" respawn="true">
     <param name="baud" value="57600" />
   </node>
+  <node pkg="rosserial_python" type="serial_node.py" args="/dev/ttyUSB0" name="serial_node2" respawn="true">
+    <param name="baud" value="57600" />
+  </node>
   <rosparam param="ticks_meter">16400</rosparam>
 	
   <node pkg="differential_drive" type="diff_tf.py" name="diff_tf">
-  	  <rosparam param="base_width">0.353</rosparam>
+          <rosparam param="base_width">0.353</rosparam>
 	  <rosparam param="encoder_min">-1000000</rosparam>
 	  <rosparam param="encoder_max">1000000</rosparam>
   </node>
@@ -18,8 +21,8 @@
       <remap from="motor_cmd" to="lmotor_cmd"/>
       <remap from="wheel_vtarget" to="lwheel_vtarget"/>
       <remap from="wheel_vel" to="lwheel_vel"/>
-      <rosparam param="Kp">20</rosparam>
-      <rosparam param="Ki">5</rosparam>
+      <rosparam param="Kp">25</rosparam>
+      <rosparam param="Ki">10</rosparam>
       <rosparam param="Kd">0</rosparam>
       <rosparam param="out_min">-254</rosparam>
       <rosparam param="out_max">254</rosparam>
@@ -34,8 +37,8 @@
       <remap from="motor_cmd" to="rmotor_cmd"/>
       <remap from="wheel_vtarget" to="rwheel_vtarget"/>
       <remap from="wheel_vel" to="rwheel_vel"/>
-      <rosparam param="Kp">20</rosparam>
-      <rosparam param="Ki">5</rosparam>
+      <rosparam param="Kp">25</rosparam>
+      <rosparam param="Ki">10</rosparam>
       <rosparam param="Kd">0</rosparam>
       <rosparam param="out_min">-254</rosparam>
       <rosparam param="out_max">254</rosparam>
