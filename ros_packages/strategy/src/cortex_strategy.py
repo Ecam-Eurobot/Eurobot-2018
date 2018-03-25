@@ -109,6 +109,7 @@ class Cortex:
 
     def reset(self, _):
         self.reset_requested = True
+        self.actions = rospy.get_param("/actions/{}".format(rospy.get_param('team')))
         self.move_base.cancel_goal()
 
     def pause(self, value):
