@@ -3,6 +3,13 @@
 #include <Encoder.h>
 #include <FlexiTimer2.h>
 
+// ROS dependencies
+#include <ros.h>
+#include <std_msgs/Float32.h>
+#include <std_msgs/Int64.h>
+#include <std_msgs/Empty.h>
+#include <ecam_msg/Encoders.h>
+
 // Wiring 
 // FL motor
 // HBridge ENA : 3; IN1 : 28; IN2 : 26 
@@ -19,6 +26,10 @@
 // BR motor
 // HBridge ENA : 6; IN1 : 25; IN2 : 23 
 // Motor YELLOW : 36; WHITE : 19
+
+
+// The use of flexitimer2 (using TIMER2) renders the 
+// PWM signal of pins 9 and 10 on the arduino MEGA unusable
 
 // Front Left motor pins 
 #define PWM_FL 3
@@ -75,10 +86,58 @@ volatile long old_encoder_FR = 0;
 volatile long old_encoder_BL = 0;
 volatile long old_encoder_BR = 0;
 
-float velocity_FL = 1;
-float velocity_FR = 1;
-float velocity_BL = 1;
-float velocity_BR = 1;
+float velocity_FL = 0;
+float velocity_FR = 0;
+float velocity_BL = 0;
+float velocity_BR = 0;
+
+bool flag_encoders = false;
+
+
+// ROS
+ros::NodeHandle nh;
+
+std_msgs::Float32 ros_velocity_FL;
+std_msgs::Float32 ros_velocity_FR;
+std_msgs::Float32 ros_velocity_BL;
+std_msgs::Float32 ros_velocity_BR;
+
+std_msgs::Empty ros_empty_msg;
+
+const long SERIAL_BAUDRATE = 115200;
+
+// ROS Subscribers
+void set_FL_velocity( const std_msgs::Float32 & velocity_msg){
+    velocity_FL = velocity_msg.data;
+}
+
+void set_FR_velocity( const std_msgs::Float32 & velocity_msg){
+    velocity_FR = velocity_msg.data;
+}
+
+void set_BL_velocity( const std_msgs::Float32 & velocity_msg){
+    velocity_BL = velocity_msg.data;
+}
+
+void set_BR_velocity( const std_msgs::Float32 & velocity_msg){
+    velocity_BR = velocity_msg.data;
+}
+
+ros::Subscriber<std_msgs::Float32> mecanumFL("/motor/front_left/velocity" , &set_FL_velocity);
+ros::Subscriber<std_msgs::Float32> mecanumFR("/motor/front_right/velocity", &set_FR_velocity);
+ros::Subscriber<std_msgs::Float32> mecanumBL("/motor/back_left/velocity"  , &set_BL_velocity);
+ros::Subscriber<std_msgs::Float32> mecanumBR("/motor/back_right/velocity" , &set_BR_velocity);
+
+// ROS Publishers
+std_msgs::Float32 ros_encoder_FL;
+std_msgs::Float32 ros_encoder_FR;
+std_msgs::Float32 ros_encoder_BL;
+std_msgs::Float32 ros_encoder_BR;
+
+ros::Publisher encoder_pub_FL("motor/front_left/encoder", &ros_encoder_FL);
+ros::Publisher encoder_pub_FR("motor/front_right/encoder", &ros_encoder_FR);
+ros::Publisher encoder_pub_BL("motor/back_left/encoder", &ros_encoder_BL);
+ros::Publisher encoder_pub_BR("motor/back_right/encoder", &ros_encoder_BR);
 
 void setup() {
 
@@ -95,7 +154,7 @@ void setup() {
     pinMode(IN1_BR,OUTPUT); 
     pinMode(IN2_BR,OUTPUT);  
 
-    FlexiTimer2::set(CADENCE_MS, isrt); // Periodic execution of isrt() function
+    FlexiTimer2::set(CADENCE_MS, compute_velocity); // Periodic execution of isrt() function
     FlexiTimer2::start();
 
     PID_FL.SetMode(AUTOMATIC);
@@ -109,7 +168,46 @@ void setup() {
     PID_BR.SetOutputLimits(-255,255);
     PID_BL.SetMode(AUTOMATIC);
     PID_BL.SetSampleTime(CADENCE_MS);   
-    PID_BL.SetOutputLimits(-255,255);    
+    PID_BL.SetOutputLimits(-255,255);  
+
+    // ROS
+    nh.initNode();
+
+    nh.subscribe(mecanumFL);
+    nh.subscribe(mecanumFR);
+    nh.subscribe(mecanumBL);
+    nh.subscribe(mecanumBR);
+
+    nh.advertise(encoder_pub_FL);
+    nh.advertise(encoder_pub_FR);
+    nh.advertise(encoder_pub_BL);
+    nh.advertise(encoder_pub_BR);
+
+    // float gain_p;
+    // float gain_i;
+    // float gain_d;
+    // if (!nh.getParam("~motor/front_left/pid/gain_p", &gain_p)) { gain_p = 80; }
+    // if (!nh.getParam("~motor/front_left/pid/gain_i", &gain_i)) { gain_i = 5; }
+    // if (!nh.getParam("~motor/front_left/pid/gain_d", &gain_d)) { gain_d = 0; }
+    // PID_FL.SetTunings(gain_p, gain_i, gain_d);
+
+    // if (!nh.getParam("/motor/front_right/pid/gain_p", &gain_p)) { gain_p = 80; }
+    // if (!nh.getParam("/motor/front_right/pid/gain_i", &gain_i)) { gain_i = 5; }
+    // if (!nh.getParam("/motor/front_right/pid/gain_d", &gain_d)) { gain_d = 0; }
+    // PID_FR.SetTunings(gain_p, gain_i, gain_d);
+
+    // if (!nh.getParam("/motor/back_left/pid/gain_p", &gain_p)) { gain_p = 80; }
+    // if (!nh.getParam("/motor/back_left/pid/gain_i", &gain_i)) { gain_i = 5; }
+    // if (!nh.getParam("/motor/back_left/pid/gain_d", &gain_d)) { gain_d = 0; }
+    // PID_BL.SetTunings(gain_p, gain_i, gain_d);
+
+    // if (!nh.getParam("/motor/back_right/pid/gain_p", &gain_p)) { gain_p = 80; }
+    // if (!nh.getParam("/motor/back_right/pid/gain_i", &gain_i)) { gain_i = 5; }
+    // if (!nh.getParam("/motor/back_right/pid/gain_d", &gain_d)) { gain_d = 0; }
+    // PID_BR.SetTunings(gain_p, gain_i, gain_d);
+    
+
+    Serial.begin(SERIAL_BAUDRATE);
 }
 
 void loop() {
@@ -169,12 +267,30 @@ void loop() {
     analogWrite(PWM_FL, abs(output_FL));
     analogWrite(PWM_FR, abs(output_FR));
     analogWrite(PWM_BL, abs(output_BL));
-    analogWrite(PWM_BR, abs(output_BR));    
+    analogWrite(PWM_BR, abs(output_BR));
+
+    if (flag_encoders) {
+        ros_encoder_FL.data = old_encoder_FL;
+        encoder_pub_FL.publish(&ros_encoder_FL);
+
+        ros_encoder_FR.data = old_encoder_FR;
+        encoder_pub_FR.publish(&ros_encoder_FR);
+
+        ros_encoder_BL.data = old_encoder_BL;
+        encoder_pub_BL.publish(&ros_encoder_BL);
+
+        ros_encoder_BR.data = old_encoder_BR;
+        encoder_pub_BR.publish(&ros_encoder_BR);
+
+        flag_encoders = false;
+    }
+
+    nh.spinOnce(); 
 }
 
 // this function is registered as an event, see setup()
 // Speed measurement 
-void isrt(){
+void compute_velocity(){
     // FL motor
     int delta_encoder_FL = motor_encoder_FL.read() - old_encoder_FL;
     old_encoder_FL = motor_encoder_FL.read();
@@ -194,4 +310,7 @@ void isrt(){
     int delta_encoder_BR = motor_encoder_BR.read() - old_encoder_BR;
     old_encoder_BR = motor_encoder_BR.read();
     angular_speed_BR = -( (2.0 * 3.141592 * (double)delta_encoder_BR) / ENCODER_TICKS_PER_REV ) / dt;  // rad/s
+
+    flag_encoders = true;
+
 }
