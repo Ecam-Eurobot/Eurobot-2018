@@ -3,18 +3,39 @@
 #include <Encoder.h>
 #include <FlexiTimer2.h>
 
+// Wiring 
+// FL motor
+// HBridge ENA : 3; IN1 : 28; IN2 : 26 
+// Motor YELLOW : 42; WHITE : 20
+
+// FR motor
+// HBridge ENA : 5; IN3 : 22; IN4 : 24 
+// Motor YELLOW : 40; WHITE : 2
+
+// BL motor
+// HBridge ENA : 11; IN3 : 29; IN4 : 27 
+// Motor YELLOW : 38; WHITE : 21
+
+// BR motor
+// HBridge ENA : 6; IN1 : 25; IN2 : 23 
+// Motor YELLOW : 36; WHITE : 19
+
+// Front Left motor pins 
 #define PWM_FL 3
 #define IN1_FL 28
 #define IN2_FL 26
 
+// Front Right motor pins
 #define PWM_FR 5
 #define IN1_FR 22
 #define IN2_FR 24
-//IN3=29 et IN4=27
+
+// Back Left motor pins
 #define PWM_BL 11
 #define IN1_BL 27
 #define IN2_BL 29
 
+// Back Right motor pins
 #define PWM_BR 6
 #define IN1_BR 23
 #define IN2_BR 25 
@@ -25,7 +46,6 @@ Encoder motor_encoder_BL = Encoder(21, 38);
 Encoder motor_encoder_BR = Encoder(19, 36);
 
 const int ENCODER_TICKS_PER_REV = 3200;
-
 const int CADENCE_MS = 10;
 volatile double dt = CADENCE_MS / 1000.;
 
@@ -108,7 +128,8 @@ void loop() {
     PID_FR.Compute();
     PID_BL.Compute();
     PID_BR.Compute();
-    
+
+    // Handle direction with H bridge pin writing 
     if (output_FL < 0 ){
       digitalWrite(IN1_FL, HIGH);
       digitalWrite(IN2_FL, LOW);
@@ -154,22 +175,22 @@ void loop() {
 // this function is registered as an event, see setup()
 // Speed measurement 
 void isrt(){
-    // Motor FL
+    // FL motor
     int delta_encoder_FL = motor_encoder_FL.read() - old_encoder_FL;
     old_encoder_FL = motor_encoder_FL.read();
     angular_speed_FL = ( (2.0 * 3.141592 * (double)delta_encoder_FL) / ENCODER_TICKS_PER_REV ) / dt;  // rad/s
 
-    // Motor FR
+    // FR motor
     int delta_encoder_FR = motor_encoder_FR.read() - old_encoder_FR;
     old_encoder_FR = motor_encoder_FR.read();
     angular_speed_FR = -( (2.0 * 3.141592 * (double)delta_encoder_FR) / ENCODER_TICKS_PER_REV ) / dt;  // rad/s
 
-    // Motor BL
+    // BL motor
     int delta_encoder_BL = motor_encoder_BL.read() - old_encoder_BL;
     old_encoder_BL = motor_encoder_BL.read();
     angular_speed_BL = ( (2.0 * 3.141592 * (double)delta_encoder_BL) / ENCODER_TICKS_PER_REV ) / dt;  // rad/s
 
-    // Motor BR
+    // BR motor
     int delta_encoder_BR = motor_encoder_BR.read() - old_encoder_BR;
     old_encoder_BR = motor_encoder_BR.read();
     angular_speed_BR = -( (2.0 * 3.141592 * (double)delta_encoder_BR) / ENCODER_TICKS_PER_REV ) / dt;  // rad/s
